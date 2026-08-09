@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/style.css" rel="stylesheet">
+  <link href="/week.css" rel="stylesheet">
+  <title>メイン編集画面</title>
+</head>
+
+<body>
+    <div class="sidebar">
+      <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+      <!--<a href="/howto">ガイドページ</a>-->
+      <!--<a href="/team">チーム一覧</a>-->
+      <a href="/setting/<%= @user.id %>">設定</a>
+    </div>
+  <div class="layout">
+  <div class="left-area">
+
+    <!-- 上部バー（横スクロール） -->
+    <!--<div class="top-bar">-->
+    <!--  <button>全部</button>-->
+    <!--  <button>動物</button>-->
+    <!--  <button>食べ物</button>-->
+    <!--  <button>季節</button>-->
+    <!--  <button>かわいい</button>-->
+    <!--  <button>イベント</button>-->
+    <!--  <button>その他</button>-->
+    <!--</div>-->
+
+    <!-- 下部リスト（縦スクロール） -->
+<div class="scroll-area">
+  <div class="image-palette">
+  <% @images.each do |logo| %>
+    <div class="item">
+      <img src="<%= logo.images %>" class="palette-image" draggable="true">
+    </div>
+  <% end %>
+  </div>
+</div>
+
+  </div>
+
+  <!-- 右側エリア -->
+  <div class="right-area">
+    <div class="week-calendar">
+      <div class="day-column" data-day="mon" style= "background:<%= @monday_color %>">
+        <div class="day-label">
+          <% if @calendar_display == "Kanji" %>
+          <p>月</p>
+          <% else %>
+          <p>げつ</p>
+          <% end %>
+        </div>
+        <div class="drop-zones">
+          <div class="drop-zone">
+            <% unless @calendar["mon"][0].nil?%>
+              <img src="<%= @calendar["mon"][0] %>" class="day-image">
+            <% end %>
+          </div>
+          <div class="drop-zone">
+            <% unless @calendar["mon"][1].nil?%>
+              <img src="<%= @calendar["mon"][1] %>" class="day-image">
+            <% end %>
+          </div>
+          <div class="drop-zone">
+            <% unless @calendar["mon"][2].nil?%>
+              <img src="<%= @calendar["mon"][2] %>" class="day-image">
+            <% end %>
+          </div>
+          <div class="drop-zone">
+            <% unless @calendar["mon"][3].nil?%>
+              <img src="<%= @calendar["mon"][3] %>" class="day-image">
+            <% end %>
+          </div>
+          <div class="drop-zone">
+            <% unless @calendar["mon"][4].nil?%>
+              <img src="<%= @calendar["mon"][4] %>" class="day-image">
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <div class="day-column" data-day="tue" style= "background:<%= @tuesday_color %>">
+      <div class="day-label">
+        <% if @calendar_display == "Kanji" %>
+        <p>火</p>
+        <% else %>
+        <p>か</p>
+        <% end %>
+        </div>
+      
+      <div class="drop-zones">
+        <div class="drop-zone">
+          <% unless @calendar["tue"][0].nil? %>
+          <img src="<%= @calendar["tue"][0]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["tue"][1].nil? %>
+          <img src="<%= @calendar["tue"][1]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["tue"][2].nil? %>
+          <img src="<%= @calendar["tue"][2]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["tue"][3].nil? %>
+          <img src="<%= @calendar["tue"][3]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["tue"][4].nil? %>
+          <img src="<%= @calendar["tue"][4]%>" class="day-image">
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="day-column" data-day="wed" style= "background:<%= @wednesday_color %>">
+      <div class="day-label">
+        <% if @calendar_display == "Kanji" %>
+        <p>水</p>
+        <% else %>
+        <p>すい</p>
+        <% end %>
+        </div>
+      <div class="drop-zones">
+        <div class="drop-zone">
+          <% unless @calendar["wed"][0].nil? %>
+          <img src="<%= @calendar["wed"][0]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["wed"][1].nil? %>
+          <img src="<%= @calendar["wed"][1]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["wed"][2].nil? %>
+          <img src="<%= @calendar["wed"][2]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["wed"][3].nil? %>
+          <img src="<%= @calendar["wed"][3]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["wed"][4].nil? %>
+          <img src="<%= @calendar["wed"][4]%>" class="day-image">
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="day-column" data-day="thu" style= "background:<%= @thursday_color %>">
+      <div class="day-label">
+        <% if @calendar_display == "Kanji" %>
+        <p>木</p>
+        <% else %>
+        <p>もく</p>
+        <% end %>
+        </div>
+      <div class="drop-zones">
+        <div class="drop-zone">
+          <% unless @calendar["thu"][0].nil? %>
+          <img src="<%= @calendar["thu"][0]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["thu"][1].nil? %>
+          <img src="<%= @calendar["thu"][1]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["thu"][2].nil? %>
+          <img src="<%= @calendar["thu"][2]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["thu"][3].nil? %>
+          <img src="<%= @calendar["thu"][3]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["thu"][4].nil? %>
+          <img src="<%= @calendar["thu"][4]%>" class="day-image">
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="day-column" data-day="fri" style= "background:<%= @friday_color %>">
+      <div class="day-label">
+        <% if @calendar_display == "Kanji" %>
+        <p>金</p>
+        <% else %>
+        <p>きん</p>
+        <% end %>
+        </div>
+      <div class="drop-zones">
+        <div class="drop-zone">
+          <% unless @calendar["fri"][0].nil? %>
+          <img src="<%= @calendar["fri"][0]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["fri"][1].nil? %>
+          <img src="<%= @calendar["fri"][1]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["fri"][2].nil? %>
+          <img src="<%= @calendar["fri"][2]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["fri"][3].nil? %>
+          <img src="<%= @calendar["fri"][3]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["fri"][4].nil? %>
+          <img src="<%= @calendar["fri"][4]%>" class="day-image">
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="day-column" data-day="sat" style= "background:<%= @saturday_color %>">
+      <div class="day-label">
+        <% if @calendar_display == "Kanji" %>
+        <p>土</p>
+        <% else %>
+        <p>ど</p>
+        <% end %>
+        </div>
+      <div class="drop-zones">
+        <div class="drop-zone">
+        <% unless @calendar["sat"][0].nil? %>
+          <img src="<%= @calendar["sat"][0]%>" class="day-image">
+        <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sat"][1].nil? %>
+          <img src="<%= @calendar["sat"][1]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sat"][2].nil? %>
+          <img src="<%= @calendar["sat"][2]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sat"][3].nil? %>
+          <img src="<%= @calendar["sat"][3]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sat"][4].nil? %>
+          <img src="<%= @calendar["sat"][4]%>" class="day-image">
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="day-column" data-day="sun" style= "background:<%= @sunday_color %>">
+      <div class="day-label">
+        <% if @calendar_display == "Kanji"%>
+        <p>日</p>
+        <% else %>
+        <p>にち</p>
+        <% end %>
+        </div>
+      <div class="drop-zones">
+        <div class="drop-zone">
+          <% unless @calendar["sun"][0].nil? %>
+          <img src="<%= @calendar["sun"][0]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sun"][1].nil? %>
+          <img src="<%= @calendar["sun"][1]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sun"][2].nil? %>
+          <img src="<%= @calendar["sun"][2]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sun"][3].nil? %>
+          <img src="<%= @calendar["sun"][3]%>" class="day-image">
+          <% end %>
+        </div>
+        <div class="drop-zone">
+          <% unless @calendar["sun"][4].nil? %>
+          <img src="<%= @calendar["sun"][4]%>" class="day-image">
+          <% end %>
+        </div>
+      </div>
+    </div>
+</div>
+
+  </div>
+    <button class="save-button">
+    保存
+    </button>
+    </div>
+    <script src="/script.js"></script>
+    <script>
+      
+      function buildCalendarJson() {
+        const result = {};
+
+        document.querySelectorAll('.day-column').forEach(column => {
+          const dayKey = column.dataset.day;
+          const zones = column.querySelectorAll('.drop-zone');
+
+          result[dayKey] = Array.from(zones).map(zone => {
+            const img = zone.querySelector('img');
+            if (!img) return null;
+            const url = new URL(img.src, window.location.origin);
+            if (url.origin === window.location.origin) {
+              return url.pathname;
+            }
+            return url.href;
+          });
+        });
+
+        return result;
+      }
+      
+      document.querySelector('.save-button').addEventListener('click', async () => {
+      const data = buildCalendarJson();
+    
+      try {
+        const res = await fetch("/recalendar_week/<%= @user.id %>/<%= @calendar_id.id %>", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+    
+        if (!res.ok) {
+          console.error('保存失敗', await res.text());
+          alert('保存に失敗しました');
+          return;
+        }
+    
+        const json = await res.json();
+        console.log('保存完了:', json);
+        alert('保存できました！');
+        if (json.redirect_to) {
+        window.location.href = json.redirect_to;
+        }
+      } catch (e) {
+        console.error('通信エラー', e);
+        alert('通信エラーが発生しました');
+      }
+    });
+    
+    </script>
+</body>

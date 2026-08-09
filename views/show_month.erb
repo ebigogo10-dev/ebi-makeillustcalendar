@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カレンダー一覧</title>
+  <link href="/style.css" rel="stylesheet">
+  <link href="/show.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+  
+  <div class="sidebar">
+    <button href="/show_day/<%= @user.id %>">カレンダー一覧</button>
+      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+      <!--<a href="/howto">ガイドページ</a>-->
+      <!--<a href="/team">チーム一覧</a>-->
+      <a href="/setting/<%= @user.id %>">設定</a>
+  </div>
+  
+  <div class="main">
+  
+    <div class="sidebar">
+      <a href="/show_day/<%= @user.id %>">dayカレンダーを見る</a>
+      <a href="/show_week/<%= @user.id %>">weekカレンダーを見る</a>
+      <button href="/show_month/<%= @user.id %>">monthカレンダーを見る</button>
+    </div>
+    
+    
+    <div class="month">
+    <div class="calendar-list">
+
+    <% @calendar_month.each do |calendar| %>
+      <% month_data = JSON.parse(calendar.calendar_info || "{}") %>
+      <% image_slot_count = [[calendar.image_slot_count.to_i, 1].max, 2].min %>
+      <% calendar_name = calendar.calendar_name.to_s.strip %>
+      <% calendar_name = "無題のカレンダー" if calendar_name.empty? %>
+      <% escaped_calendar_name = Rack::Utils.escape_html(calendar_name) %>
+     
+    
+     <div class="calendar-card">
+       
+          <div class="calendar-name-editor" data-update-url="/calendar_name/<%= @user.id %>/<%= calendar.id %>" data-current-name="<%= escaped_calendar_name %>">
+            <h3 class="calendar-name-text"><%= escaped_calendar_name %></h3>
+            <input type="text" class="calendar-name-input" value="<%= escaped_calendar_name %>" aria-label="カレンダー名" maxlength="255" hidden>
+            <button type="button" class="calendar-name-edit-btn" aria-label="カレンダー名を編集" title="カレンダー名を編集">
+              <img src="/pen.png" alt="" aria-hidden="true">
+            </button>
+          </div>
+          <% if calendar.start_day.nil? && calendar.day.nil? %>
+          <p>カレンダーの月:不明 / 作成日:不明</p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% elsif calendar.start_day.nil?%>
+          <p>カレンダーの月:不明 / 作成日:<%= calendar.day %></p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% elsif calendar.day.nil?%>
+          <p>カレンダーの月:<%= calendar.start_day.strftime("%Y年%m月")%> / 作成日:不明</p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% else %>
+          <p>カレンダーの月:<%= calendar.start_day.strftime("%Y年%m月")%> / 作成日:<%= calendar.day %></p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% end %>
+          
+          <%
+              monday_color = ""
+              tuesday_color = ""
+              wednesday_color = ""
+              thursday_color = ""
+              friday_color = ""
+              saturday_color = ""
+              sunday_color = ""
+              
+              calendar_color = calendar.color
+              if calendar_color == "3colors"
+              saturday_color = "#bfddff"
+              sunday_color = "#ffdfdf"
+              elsif calendar_color == "7colors"
+              monday_color = "#ffe5fb"      
+              tuesday_color = "#eaddff"     
+              wednesday_color = "#dff9ff"  
+              thursday_color = "#efffdf"    
+              friday_color = "#fffadf"      
+              saturday_color = "#ffeadf"   
+              sunday_color = "#ffdfdf"     
+              end
+            %>
+            
+      <div class="month-calendar">
+            
+        <%
+        # 月の最初の日と最後の日を取得
+        first_day = Date.parse("#{calendar.start_day}-01")
+        puts first_day
+        last_day = Date.new(first_day.year, first_day.month, -1)
+        
+        # 最初の日が何曜日か（0=日曜、6=土曜）
+        start_wday = first_day.wday
+        
+        # 全体の週数を計算
+        total_days = last_day.day + start_wday
+        weeks = (total_days / 7.0).ceil
+      
+        %>
+        
+      <div class="month-header">
+      <% if calendar.display == "Kanji" %>
+        <p><%= calendar.start_day.month.to_i %>月</p>
+      <% else %>
+        <p><%= calendar.start_day.month.to_i %>がつ</p>
+      <% end %>
+      </div>
+        
+        <!-- 曜日ヘッダー -->
+      <div class="weekday-header">
+        
+        <div class="weekday-cell" style="background:<%= sunday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>日</p>
+          <% else %>
+          <p>にち</p>
+          <% end %>
+        </div>
+        
+        <div class="weekday-cell" style="background:<%= monday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>月</p>
+          <% else %>
+          <p>げつ</p>
+          <% end %>
+        </div>
+        
+        <div class="weekday-cell" style="background:<%= tuesday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>火</p>
+          <% else %>
+          <p>か</p>
+          <% end %>
+        </div>
+        
+        <div class="weekday-cell" style="background:<%= wednesday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>水</p>
+          <% else %>
+          <p>すい</p>
+          <% end %>
+        </div>
+        
+        <div class="weekday-cell" style="background:<%= thursday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>木</p>
+          <% else %>
+          <p>もく</p>
+          <% end %>
+        </div>
+        
+        <div class="weekday-cell" style="background:<%= friday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>金</p>
+          <% else %>
+          <p>きん</p>
+          <% end %>
+        </div>
+        
+        <div class="weekday-cell" style="background:<%= saturday_color %>">
+          <% if calendar.display == "Kanji" %>
+          <p>土</p>
+          <% else %>
+          <p>ど</p>
+          <% end %>
+        </div>
+        
+      </div>
+      <div class="calendar-grid" style="--weeks: <%= weeks %>;">
+      <% (0...weeks).each do |week| %>
+        <% (0..6).each do |wday| %>
+          <%
+            day_index = week * 7 + wday
+            display_day = day_index - start_wday + 1
+    
+            bg_color = case wday
+              when 0 then sunday_color
+              when 1 then monday_color
+              when 2 then tuesday_color
+              when 3 then wednesday_color
+              when 4 then thursday_color
+              when 5 then friday_color
+              when 6 then saturday_color
+            end
+          %>
+    
+          <% if display_day >= 1 && display_day <= last_day.day %>
+            <% date_key = "#{first_day.strftime('%Y-%m')}-#{display_day.to_s.rjust(2, '0')}" %>
+            <% image = month_data[date_key] %>
+            <% images = image.is_a?(Array) ? image : [image] %>
+            <div class="day-cell" data-date="<%= date_key %>" style="background:<%= bg_color %>">
+              <div class="day-number">
+                <p><%= display_day %></p>
+              </div>
+    
+              <div class="day-content">
+                <% image_slot_count.times do |slot_index| %>
+                  <% image_url = images[slot_index] %>
+                  <div class="drop-zone" data-slot-index="<%= slot_index %>">
+                    <% unless image_url.nil? || image_url == "" %>
+                      <img src="<%= image_url %>" class="day-image">
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% else %>
+            <div class="day-cell empty"></div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    
+      </div>
+          
+      <button class="btn btn-success print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
+      <button class="btn btn-success pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
+      <a href="/reedit_month/<%=@user.id%>/<%= calendar.id %>" class="btn btn-success btn-edit">編集</a>
+    </div>
+    
+    <% end %>
+    </div>
+    </div>
+    
+  </div>
+  <script src="/script.js"></script>
+  <script src="/calendar_name_editor.js"></script>
+<script>
+  document.querySelectorAll(".pdf-btn").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const calendarCard = btn.closest(".calendar-card");
+    const monthCalendar = calendarCard.querySelector(".month-calendar");
+
+    if (!monthCalendar) {
+      alert("PDF化するmonthカレンダーが見つかりませんでした。");
+      return;
+    }
+
+    const filename = ((btn.dataset.calendarName || "カレンダー")
+      .replace(/[\\/:*?"<>|]/g, "_")
+      .trim() || "カレンダー") + ".pdf";
+
+    // 実際に表示されている週数を取得
+    const dayCells = monthCalendar.querySelectorAll(".calendar-grid .day-cell");
+    const renderedWeeks = Math.ceil(dayCells.length / 7);
+
+    const pdfStage = document.createElement("div");
+    pdfStage.style.position = "fixed";
+    pdfStage.style.left = "0";
+    pdfStage.style.top = "0";
+    pdfStage.style.width = "100vw";
+    pdfStage.style.height = "100vh";
+    pdfStage.style.background = "rgba(255,255,255,0.01)";
+    pdfStage.style.zIndex = "999999";
+    pdfStage.style.overflow = "visible";
+    pdfStage.style.pointerEvents = "none";
+
+    const pdfPage = document.createElement("div");
+    pdfPage.style.width = "297mm";
+    pdfPage.style.height = "210mm";
+    pdfPage.style.background = "white";
+    pdfPage.style.padding = "6mm";
+    pdfPage.style.boxSizing = "border-box";
+    pdfPage.style.overflow = "hidden";
+
+    pdfPage.innerHTML = `
+  <style>
+.pdf-month-calendar {
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 297 / 210; /* A4横向き */
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-month-calendar .month-header {
+  box-sizing: border-box;
+  border: 1px solid black;
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 35px;
+}
+
+/* 曜日ヘッダー */
+.pdf-month-calendar .weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+
+.pdf-month-calendar .weekday-cell {
+  border: 1px solid black;
+  padding: 10px 6px;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+}
+
+.pdf-month-calendar .weekday-cell p {
+  font-size: 19px;
+  margin: 0;
+}
+
+/* 日付グリッド */
+.pdf-month-calendar .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  flex: 1;
+  grid-template-rows: repeat(var(--weeks), 1fr);
+  min-height: 0;
+}
+
+.pdf-month-calendar .weeks {
+}
+
+/* 各日付セル */
+.pdf-month-calendar .day-cell {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 6px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;  
+}
+
+.pdf-month-calendar .day-cell:first-child {
+  border-left: 1px solid #ccc;
+}
+
+.pdf-month-calendar .day-cell.empty {
+  border: none;
+  background-color: transparent;
+}
+
+/* 日付の数字 */
+.pdf-month-calendar .day-number {
+  text-align: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.pdf-month-calendar .day-number p {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* 日付の内容エリア */
+.pdf-month-calendar .day-content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 1mm;
+}
+
+/* ドロップゾーン */
+.pdf-month-calendar .drop-zone {
+  flex: 1 1 0;
+  border: 1px dashed #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+}
+
+.pdf-month-calendar .day-image {
+  max-width: 90%;
+  max-height: 90%;
+  height: repeat(var(--weeks), 1fr);
+  min-height: 0;
+}
+      </style>
+
+      <div class="pdf-month-calendar">
+        ${monthCalendar.innerHTML}
+      </div>
+    `;
+
+    pdfStage.appendChild(pdfPage);
+    document.body.appendChild(pdfStage);
+
+    const images = pdfPage.querySelectorAll("img");
+    const imagePromises = Array.from(images).map(img => {
+      return new Promise(resolve => {
+        if (img.complete) {
+          resolve();
+        } else {
+          img.onload = resolve;
+          img.onerror = resolve;
+        }
+      });
+    });
+
+    await Promise.all(imagePromises);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const opt = {
+      margin: 0,
+      filename: filename,
+      image: {
+        type: "jpeg",
+        quality: 0.98
+      },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        scrollX: 0,
+        scrollY: 0
+      },
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "landscape"
+      }
+    };
+
+    await html2pdf()
+      .set(opt)
+      .from(pdfPage)
+      .save();
+
+    document.body.removeChild(pdfStage);
+  });
+});
+  // 印刷機能
+document.querySelectorAll(".print-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const calendarCard = btn.closest(".calendar-card");
+    const monthCalendar = calendarCard.querySelector(".month-calendar");
+    
+    // 各曜日の背景色を取得
+    const dayColumns = monthCalendar.querySelectorAll('.week-header');
+    const colors = Array.from(dayColumns).map(col => {
+      return col.style.background || '';
+    });
+    
+    // 新しいウィンドウを開く
+    const printWindow = window.open('', '', 'width=1200,height=800');
+    
+    // week-calendarのHTMLを取得
+    const calendarHTML = monthCalendar.innerHTML;
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <style>
+        @page {
+            size: A4 landscape;
+          }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          html, body { 
+            margin: 0; 
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+          }
+          /* 1ヶ月カレンダー */
+        .month-calendar {
+          background-color: white;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          padding: 20px;
+          width: 90%;
+          max-width: 90%;
+          aspect-ratio: 297 / 210; /* A4横向き */
+          display: flex;
+          flex-direction: column;
+        }
+        
+        /* 曜日ヘッダー */
+        .weekday-header {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          margin-bottom: 8px;
+        }
+        
+        .weekday-cell {
+          border: 1px solid black;
+          padding: 10px 6px;
+          box-sizing: border-box;
+          text-align: center;
+          font-weight: bold;
+        }
+        
+        .weekday-cell p {
+          font-size: 24px;
+          margin: 0;
+        }
+        
+        /* 日付グリッド */
+        .calendar-grid {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          border-top: 1px solid #ccc;
+          border-left: 1px solid #ccc;
+        }
+        
+        /* 各日付セル */
+        .day-cell {
+          border-right: 1px solid #ccc;
+          border-bottom: 1px solid #ccc;
+          padding: 6px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          height: 125px;
+        }
+        
+        .day-cell:first-child {
+          border-left: 1px solid #ccc;
+        }
+        
+        .day-cell.empty {
+          border: none;
+          background-color: transparent;
+        }
+        
+        /* 日付の数字 */
+        .day-number {
+          text-align: center;
+          border-bottom: 1px solid black;
+          padding-bottom: 4px;
+          margin-bottom: 4px;
+        }
+        
+        .day-number p {
+          font-size: 20px;
+          font-weight: bold;
+          margin: 0;
+        }
+        
+        /* 日付の内容エリア */
+        .day-content {
+          flex: 1;
+          display: flex;
+          flex-direction: row;
+          gap: 4px;
+          min-height: 0;
+        }
+        
+        /* ドロップゾーン */
+        .drop-zone {
+          flex: 1 1 0;
+          min-height: 0;
+          border: 1px dashed #ddd;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .day-image {
+          max-width: 90%;
+          max-height: 90%;
+          object-fit: contain;
+        }
+        </style>
+      </head>
+      <body>
+        <div class="day-calendar">
+          ${calendarHTML}
+        </div>
+        <script>
+          window.onload = () => {
+            const images = document.querySelectorAll('img');
+            let loadedCount = 0;
+            const totalImages = images.length;
+            
+            if (totalImages === 0) {
+              window.print();
+              return;
+            }
+            
+            images.forEach(img => {
+              if (img.complete) {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                  setTimeout(() => window.print(), 500);
+                }
+              } else {
+                img.onload = () => {
+                  loadedCount++;
+                  if (loadedCount === totalImages) {
+                    setTimeout(() => window.print(), 500);
+                  }
+                };
+              }
+            });
+            
+            window.onafterprint = () => window.close();
+          };
+        <\/script>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+  });
+});
+  
+  </script>
+  </body>

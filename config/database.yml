@@ -1,0 +1,14 @@
+default_env: &default
+  adapter: postgresql
+  encoding: unicode
+  database: s_original
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: s_original
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: s_original_test

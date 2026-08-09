@@ -1,0 +1,291 @@
+/*body{*/
+/*  overflow:hidden; */
+/*}*/
+.day-calendar {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;  /* 縦方向に配置 */
+  margin-bottom: 16px;
+  
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  box-sizing: border-box;
+  
+  max-width: 45%;
+  aspect-ratio: 210 / 297;  /* A4縦向き */
+}
+
+.time-column{
+  display: flex;
+  padding: 10px;
+  padding-left: 0px;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  flex-shrink: 0;
+}
+
+.date-column{
+  padding: 10px 6px;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  border-top:1px solid black;
+  height: 64px;
+  box-sizing: border-box;
+}
+
+.date-column p {
+  height: 100%;
+  text-align: center;
+  font-size: 30px;
+}
+
+.time-display {
+  width: 70px; /* 幅を指定 */
+  height: 64px; /* 高さを指定 */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  flex-shrink: 0; /* 縮まないように */
+  border-right: 1px solid black;
+  font-size: 25px;
+  text-align: center;
+}
+
+.time-display .clock-image {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  display: block;
+}
+
+.drop-zones{
+    display: flex;
+    gap: 8px;
+    padding: 0px 0px 0px 8px;
+}
+
+.drop-zone {
+  width: 64px; /* 幅を指定 */
+  height: 64px; /* 高さを指定 */
+  border: 1px dashed #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  flex-shrink: 0; /* 縮まないように */
+}
+
+#clockList {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: .5s;
+  width: 320px;
+  /*position:absolute;*/
+}
+
+#clockList[aria-hidden="false"] {
+  overflow: visible;
+}
+
+.include-accordion {
+  width: 320px;
+  position: absolute;
+}
+
+.accordionBtn{
+  width: 130px;
+  padding: 15px 30px;
+  background-color: #8b9a6f;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px; /* 丸みをつける */
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+  z-index: 1000; /* 他の要素より前に表示 */
+}
+
+ul p{
+  width: 280px;
+  height: 30px;
+}
+
+.form {
+  width: 300px;
+  box-sizing: border-box;
+  min-height: 64px;
+  margin: 10px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid rgba(212,223,187,0.55);
+  box-shadow: 0 6px 16px rgba(77,80,54,0.08);
+  display: flex;
+  align-items: center;
+}
+
+.form select,input{
+  width: 45%;
+  padding: 12px;
+  border: 2px solid #d4dfbb;
+  border-radius: 5px;
+  font-size: 13px;
+  background-color: #fefefe;
+  box-sizing: border-box;
+}
+
+.time_layout{
+  margin-right: 10px;
+  font-size: 25px;
+}
+
+.save-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 15px 30px;
+  background-color: #8b9a6f;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px; /* 丸みをつける */
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+  z-index: 1000; /* 他の要素より前に表示 */
+}
+
+.time-style-buttons {
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  min-width: 0;
+}
+
+.time-style-btn {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  padding: 10px 6px;
+  border: 2px solid #d4dfbb;
+  border-radius: 5px;
+  background-color: #fefefe;
+  color: #333;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  text-align: center;
+}
+
+.time-style-btn.active {
+  background-color: #8b9a6f;
+  border-color: #8b9a6f;
+  color: #fff;
+  font-weight: bold;
+}
+
+.hour-picker {
+  position: relative;
+  width: 150px;
+}
+
+.hour-picker-toggle {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 40px 12px 18px;
+  border: 2px solid #d4dfbb;
+  border-radius: 6px;
+  background-color: #fefefe;
+  box-sizing: border-box;
+  color: #333;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  position: relative;
+  text-align: left;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.hour-picker-toggle::after {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #8b9a6f;
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hour-picker.open .hour-picker-toggle,
+.hour-picker-toggle:focus {
+  outline: none;
+  border-color: #8b9a6f;
+  box-shadow: 0 0 0 3px rgba(139,154,111,0.18);
+}
+
+
+.hour-picker-options {
+  background-color: #fffdf4;
+  border: 2px solid #d4dfbb;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(77,80,54,0.18);
+  box-sizing: border-box;
+  left: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 6px;
+  position: absolute;
+  top: calc(100% + 8px);
+  width: 100%;
+  z-index: 2000;
+}
+
+#clockList .time-row-form:nth-of-type(n + 6) .hour-picker-options {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.hour-picker-options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.hour-picker-options::-webkit-scrollbar-thumb {
+  background-color: #d4dfbb;
+  border-radius: 999px;
+}
+
+.hour-picker-option {
+  background-color: transparent;
+  border: none;
+  border-radius: 7px;
+  color: #333;
+  cursor: pointer;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 9px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.hour-picker-option:hover {
+  background-color: #f3eed5;
+}
+
+.hour-picker-option.selected {
+  background-color: #8b9a6f;
+  color: #fff;
+}

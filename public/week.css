@@ -1,0 +1,61 @@
+/*カレンダーの中身*/
+
+.week-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+  
+    /* A4横向き背景 */
+  /*width: 80vw;*/
+  /*height: width*210/297;*/
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  box-sizing: border-box;
+  
+  width: 100%;  /* 親要素の幅に合わせる */
+  max-width: 100%;  /* はみ出さないように */
+  aspect-ratio: 297 / 210;
+
+}
+
+.day-column {
+
+  border: 1px solid black;
+  padding: 0px 6px;
+  box-sizing: border-box;
+
+
+}
+.drop-zones{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.day-label {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  height: 10vh;
+  border-bottom:solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.day-label p{
+  font-size: 32px;
+}
+
+.drop-zone {
+  height: 110px;
+  border: 1px dashed #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 10px;
+  position: relative;
+}

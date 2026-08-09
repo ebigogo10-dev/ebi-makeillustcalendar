@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規アカウント作成</title>
+  <link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+  
+  <div class="main">
+  
+  <form action="/signup" method="post">
+    <input type="text" class="form-control" placeholder="メールアドレス" name="mail" required>
+    <input type="password" class="form-control" placeholder="登録したいパスワード" name="password" required>
+    <button type="submit" class="btn btn-success">新規登録</button>
+  </form>
+  
+  <a href="/signin" class="btn btn-success btn-center">すでにアカウントをお持ちの方はこちら</a>
+  
+  </div>
+  
+</body>

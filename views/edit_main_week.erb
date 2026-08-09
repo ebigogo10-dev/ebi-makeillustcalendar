@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/style.css" rel="stylesheet">
+  <link href="/week.css" rel="stylesheet">
+  <title>メイン編集画面</title>
+</head>
+
+<body>
+    <div class="sidebar">
+      <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+      <!--<a href="/howto">ガイドページ</a>-->
+      <!--<a href="/team">チーム一覧</a>-->
+      <a href="/setting/<%= @user.id %>">設定</a>
+    </div>
+  <div class="layout">
+  <div class="left-area">
+
+    <!-- 下部リスト（縦スクロール） -->
+<div class="scroll-area">
+  <div class="image-palette">
+  <% @images.each do |logo| %>
+    <div class="item">
+      <img src="<%= logo.images %>" class="palette-image" draggable="true">
+    </div>
+  <% end %>
+  </div>
+</div>
+
+  </div>
+
+  <!-- 右側エリア -->
+  <div class="right-area">
+  <div class="week-calendar">
+    
+  <div class="day-column" data-day="mon" style= "background:<%= @monday_color %>" >
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>月</p>
+      <% else %>
+      <p>げつ</p>
+      <% end %>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+  
+  <div class="day-column" data-day="tue" style= "background:<%= @tuesday_color %>">
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>火</p>
+      <% else %>
+      <p>か</p>
+      <% end %>
+      </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+  
+  <div class="day-column" data-day="wed" style= "background:<%= @wednesday_color %>">
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>水</p>
+      <% else %>
+      <p>すい</p>
+      <% end %>
+      </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+  <div class="day-column" data-day="thu" style= "background:<%= @thursday_color %>">
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>木</p>
+      <% else %>
+      <p>もく</p>
+      <% end %>
+      </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+  <div class="day-column" data-day="fri" style= "background:<%= @friday_color %>">
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>金</p>
+      <% else %>
+      <p>きん</p>
+      <% end %>
+      </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+  <div class="day-column" data-day="sat" style= "background:<%= @saturday_color %>">
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>土</p>
+      <% else %>
+      <p>ど</p>
+      <% end %>
+      </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+  <div class="day-column" data-day="sun" style= "background:<%= @sunday_color %>">
+    <div class="day-label">
+      <% if @calendar_display == "Kanji" %>
+      <p>日</p>
+      <% else %>
+      <p>にち</p>
+      <% end %>
+      </div>
+    <div class="drop-zones">
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+      <div class="drop-zone"></div>
+    </div>
+  </div>
+</div>
+
+  </div>
+    <button class="save-button">
+    保存
+    </button>
+    </div>
+    
+    <script src="/script.js"></script>
+    <script>
+      
+     function buildCalendarJson() {
+        const result = {};
+
+        document.querySelectorAll('.day-column').forEach(column => {
+          const dayKey = column.dataset.day;
+          const zones = column.querySelectorAll('.drop-zone');
+
+          result[dayKey] = Array.from(zones).map(zone => {
+            const img = zone.querySelector('img');
+            if (!img) return null;
+            const url = new URL(img.src, window.location.origin);
+            if (url.origin === window.location.origin) {
+              return url.pathname;
+            }
+            return url.href;
+          });
+        });
+
+        return result;
+      }
+
+      document.querySelector('.save-button').addEventListener('click', async () => {
+      const data = buildCalendarJson();
+    
+      try {
+        const res = await fetch("/calendar_week/<%= @user.id %>", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+    
+        if (!res.ok) {
+          console.error('保存失敗', await res.text());
+          alert('保存に失敗しました');
+          return;
+        }
+    
+        const json = await res.json();
+        console.log('保存完了:', json);
+        alert('保存できました！');
+        if (json.redirect_to) {
+        window.location.href = json.redirect_to;
+        }
+      } catch (e) {
+        console.error('通信エラー', e);
+        alert('通信エラーが発生しました');
+      }
+    });
+    </script>
+</body>

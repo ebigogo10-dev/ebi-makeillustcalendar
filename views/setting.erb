@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>設定</title>
+  <link href="/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="sidebar">
+    <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+      <!--<a href="/howto">ガイドページ</a>-->
+      <!--<a href="/team">チーム一覧</a>-->
+      <button href="/setting/<%= @user.id %>">設定</button>
+  </div>
+  
+  <div class="main">
+    
+  <form action="/" method="get" class="action-form">
+  <button type="submit" class="btn btn-success">サインアウトする</button>
+  </form>
+  
+  <form action="/create_username/<%= @user.id %>" method="post" class="action-form">
+  <input type="text" class="form-control" placeholder="ユーザーネーム" name="name" required>
+  <button type="submit" class="btn btn-success">決定</button>
+  </form>
+  
+  </div>
+
+</body>

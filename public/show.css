@@ -1,0 +1,469 @@
+/*カレンダーの中身*/
+
+.week .calendar-list {
+  display: flex;
+  /*justify-content: center;*/
+  flex-wrap: wrap;
+  
+}
+.week .calendar-card {
+  width: 40vw;
+  margin: 15px;
+  background-color: #e3eccc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.week .calendar-card h3 {
+  margin-top: 0;
+  color: #5a5a5a;
+}
+
+.week .calendar-card p {
+  color: #888;
+  margin: 10px 0;
+}
+.week .week-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  box-sizing: border-box;
+  
+  /* 画面に合わせて表示 */
+  max-width: 95%;
+  aspect-ratio: 297 / 210;
+
+}
+
+.week .day-column {
+
+  border: 1px solid black;
+  padding: 0px 6px;
+  box-sizing: border-box;
+  /*width: 20%;*/
+
+
+}
+.week .drop-zones{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.week .day-label {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  height: 7vh;
+  border-bottom:solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.week .day-label p{
+  font-size: 23px;
+}
+
+.week .drop-zone {
+  height: 50px;
+  border: 1px dashed #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.week .day_zone{
+  /*min-height: 80px;*/
+  display: flex;
+}
+
+.week day-image {
+  width: 70%;
+  /*height: 70px;*/
+  object-fit: contain;
+}
+
+.day .day-calendar {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;  /* 縦方向に配置 */
+  margin-bottom: 16px;
+  
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  box-sizing: border-box;
+  
+  max-width: 60%;
+  aspect-ratio: 210 / 297;  /* A4縦向き */
+}
+
+.day .time-column{
+  display: flex;
+  padding: 6px 6px;
+  padding-left: 0px;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  flex-shrink: 0;
+  font-size: 30px;
+}
+
+.day .date-column{
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  border-top:1px solid black;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.day .date-column p {
+  height: 100%;
+  text-align: center;
+  font-size: 20px;
+}
+
+.day .time-display {
+  width: 13%; /* 幅を指定 */
+  height: 50px; /* 高さを指定 */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  flex-shrink: 0; /* 縮まないように */
+  border-right: 1px solid black;
+  font-size: 13px;
+}
+
+.day .time-display .clock-image {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  display: block;
+}
+
+.day .drop-zones{
+    display: flex;
+    gap: 8px;
+    padding: 0px 0px 0px 8px;
+}
+
+.day .drop-zone {
+  width: 43px; /* 幅を指定 */
+  height: 43px; /* 高さを指定 */
+  border: 1px dashed #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  flex-shrink: 0; /* 縮まないように */
+}
+
+.day #clockList {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: .5s;
+  width: 280px;
+  /*position:absolute;*/
+}
+
+.day .calendar-list {
+  display: flex;
+  /*justify-content: center;*/
+  flex-wrap: wrap;
+  
+}
+.day .calendar-card {
+  width: 40vw;
+  margin: 15px;
+  background-color: #e3eccc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.day .calendar-card h3 {
+  margin-top: 0;
+  color: #5a5a5a;
+}
+
+.day .calendar-card p {
+  color: #888;
+  margin: 10px 0;
+}
+
+/* buttonタグをaタグと同じスタイルに */
+button.btn {
+  display: inline-block;
+  width: 30%;
+  padding: 15px 40px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.btn-success {
+  background-color: #8b9a6f;
+  color: #ffffff;
+}
+
+button.btn-success:hover {
+  background-color: #7a8960;
+}
+
+button.btn-success:active {
+  transform: scale(0.98);
+}
+
+a.btn-edit {
+  width: 20%;
+}
+
+.btns{
+  display: flex;
+}
+
+.show_btn{
+  margin: 20px;
+}
+
+
+
+.month .calendar-list {
+  display: flex;
+  /*justify-content: center;*/
+  flex-wrap: wrap;
+  
+}
+
+.month .calendar-card {
+  width: 40vw;
+  margin: 15px;
+  background-color: #e3eccc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.month .calendar-card h3 {
+  margin-top: 0;
+  color: #5a5a5a;
+}
+
+.month .calendar-card p {
+  color: #888;
+  margin: 10px 0;
+}
+.month .month-calendar {
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  width: 90%;
+  margin-bottom: 16px;
+  max-width: 90%;
+  aspect-ratio: 297 / 210; /* A4横向き */
+  display: flex;
+  flex-direction: column;
+}
+
+.month .month-header {
+  box-sizing: border-box;
+  border: 1px solid black;
+  text-align: center;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.month .month-header p {
+  margin: 5px;
+}
+
+.month .weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+
+.month .weekday-cell {
+  border: 1px solid black;
+  padding: 3px 2px;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+  height: 23px;
+}
+
+.month .weekday-cell p {
+  font-size: 10px;
+  margin: 0;
+}
+
+/* 日付グリッド */
+.month .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  flex: 1;
+  grid-template-rows: repeat(var(--weeks), minmax(0, 1fr));
+  min-height: 0;
+}
+
+/* 各日付セル */
+.month .day-cell {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 2px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;
+}
+
+.month .day-cell:first-child {
+  border-left: 1px solid #ccc;
+}
+
+.month .day-cell.empty {
+  border: none;
+  background-color: transparent;
+}
+
+/* 日付の数字 */
+.month .day-number {
+  text-align: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.month .day-number p {
+  font-size: 8px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* 日付の内容エリア */
+.month .day-content {
+  gap: 2px;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+/* ドロップゾーン */
+.month .drop-zone {
+  flex: 1 1 0;
+  min-height: 0;
+  border: 1px dashed #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.month .day-image {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+}
+
+.calendar-name-editor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  margin: 0 0 8px;
+}
+
+.calendar-name-editor .calendar-name-text {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.calendar-name-editor.is-editing {
+  display: block;
+  width: 100%;
+}
+
+.calendar-name-input {
+  width: 100%;
+  height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #8b9a6f;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #5a5a5a;
+  font-size: 18px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.calendar-name-edit-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #5a5a5a;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+}
+
+.calendar-name-edit-btn:hover,
+.calendar-name-edit-btn:focus {
+  background: rgba(139, 154, 111, 0.18);
+  color: #4f5d39;
+  outline: none;
+}
+
+.calendar-name-edit-btn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+.calendar-name-editor.is-saving .calendar-name-input {
+  opacity: 0.75;
+}
+
+.calendar-name-editor .calendar-name-text[hidden],
+.calendar-name-input[hidden],
+.calendar-name-edit-btn[hidden] {
+  display: none;
+}

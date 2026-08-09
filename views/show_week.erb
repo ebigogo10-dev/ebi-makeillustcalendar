@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カレンダー一覧</title>
+  <link href="/style.css" rel="stylesheet">
+  <link href="/show.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+  <div class="sidebar">
+    <button href="/show_day/<%= @user.id %>">カレンダー一覧</button>
+      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+      <!--<a href="/howto">ガイドページ</a>-->
+      <!--<a href="/team">チーム一覧</a>-->
+      <a href="/setting/<%= @user.id %>">設定</a>
+  </div>
+  
+  <div class="main">
+    
+    <div class="sidebar">
+      <a href="/show_day/<%= @user.id %>">dayカレンダーを見る</a>
+      <button href="/show_week/<%= @user.id %>">weekカレンダーを見る</button>
+      <a href="/show_month/<%= @user.id %>">monthカレンダーを見る</a>
+    </div>
+    
+    </div>
+    
+    <div class="week">
+    <div class="calendar-list">
+      <% @calendar_week.each do |calendar| %>
+      
+      <% calendar_name = calendar.calendar_name.to_s.strip %>
+      <% calendar_name = "無題のカレンダー" if calendar_name.empty? %>
+      <% escaped_calendar_name = Rack::Utils.escape_html(calendar_name) %>
+      
+      <div class="calendar-card">
+          <div class="calendar-name-editor" data-update-url="/calendar_name/<%= @user.id %>/<%= calendar.id %>" data-current-name="<%= escaped_calendar_name %>">
+            <h3 class="calendar-name-text"><%= escaped_calendar_name %></h3>
+            <input type="text" class="calendar-name-input" value="<%= escaped_calendar_name %>" aria-label="カレンダー名" maxlength="255" hidden>
+            <button type="button" class="calendar-name-edit-btn" aria-label="カレンダー名を編集" title="カレンダー名を編集">
+              <img src="/pen.png" alt="" aria-hidden="true">
+            </button>
+          </div>
+          <% if calendar.start_day.nil? && calendar.day.nil? %>
+          <p>カレンダーの月:不明 / 作成日:不明</p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% elsif calendar.start_day.nil?%>
+          <p>カレンダーの月:不明 / 作成日:<%= calendar.day %></p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% elsif calendar.day.nil?%>
+          <p>カレンダーの月:<%= calendar.start_day.strftime("%Y年%m月")%> / 作成日:不明</p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% else %>
+          <p>カレンダーの月:<%= calendar.start_day.strftime("%Y年%m月")%> / 作成日:<%= calendar.day %></p>
+          <% if @user.name.nil? %>
+          <p>作成者:<%= @user.mail%></p>
+          <% else %>
+          <p>作成者:<%= @user.name%></p>
+          <% end %>
+          <% end %>
+
+              <%
+              monday_color = ""
+              tuesday_color = ""
+              wednesday_color = ""
+              thursday_color = ""
+              friday_color = ""
+              saturday_color = ""
+              sunday_color = ""
+              
+              calendar_color = calendar.color
+              if calendar_color == "3colors"
+              saturday_color = "#bfddff"
+              sunday_color = "#ffdfdf"
+              elsif calendar_color == "7colors"
+              monday_color = "#ffe5fb"      
+              tuesday_color = "#eaddff"     
+              wednesday_color = "#dff9ff"  
+              thursday_color = "#efffdf"    
+              friday_color = "#fffadf"      
+              saturday_color = "#ffeadf"   
+              sunday_color = "#ffdfdf"     
+              end
+              %>
+      
+      <div class="week-calendar">
+        <div class="day-column" data-day="mon" style= "background:<%= monday_color %>">
+          <div class="day-label">
+            <% if calendar.display == "Kanji" %>
+            <p>月</p>
+            <% else %>
+            <p>げつ</p>
+            <% end %>
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["mon"][0].nil?%>
+                <img src="<%= JSON.parse(calendar.calendar_info)["mon"][0] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["mon"][1].nil?%>
+                <img src="<%= JSON.parse(calendar.calendar_info)["mon"][1] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["mon"][2].nil?%>
+                <img src="<%= JSON.parse(calendar.calendar_info)["mon"][2] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["mon"][3].nil?%>
+                <img src="<%= JSON.parse(calendar.calendar_info)["mon"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["mon"][4].nil?%>
+                <img src="<%= JSON.parse(calendar.calendar_info)["mon"][4] %>" class="day-image">
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="day-column" data-day="tue"  style= "background:<%= tuesday_color %>">
+          <div class="day-label">
+            <% if calendar.display == "Kanji" %>
+            <p>火</p>
+            <% else %>
+            <p>か</p>
+            <% end %>
+            </div>
+          
+          <div class="drop-zones">
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["tue"][0].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["tue"][0]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["tue"][1].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["tue"][1]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["tue"][2].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["tue"][2]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["tue"][3].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["tue"][3]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["tue"][4].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["tue"][4]%>" class="day-image">
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="day-column" data-day="wed" style= "background:<%= wednesday_color %>">
+          <div class="day-label">
+            <% if calendar.display == "Kanji" %>
+            <p>水</p>
+            <% else %>
+            <p>すい</p>
+            <% end %>
+            </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["wed"][0].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["wed"][0]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["wed"][1].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["wed"][1]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["wed"][2].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["wed"][2]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["wed"][3].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["wed"][3]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["wed"][4].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["wed"][4]%>" class="day-image">
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="day-column" data-day="thu" style= "background:<%= thursday_color %>">
+          <div class="day-label">
+            <% if calendar.display == "Kanji" %>
+            <p>木</p>
+            <% else %>
+            <p>もく</p>
+            <% end %>
+            </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["thu"][0].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["thu"][0]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["thu"][1].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["thu"][1]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["thu"][2].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["thu"][2]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["thu"][3].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["thu"][3]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["thu"][4].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["thu"][4]%>" class="day-image">
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="day-column" data-day="fri" style= "background:<%= friday_color %>">
+          <div class="day-label">
+            <% if calendar.display == "Kanji" %>
+            <p>金</p>
+            <% else %>
+            <p>きん</p>
+            <% end %>
+            </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["fri"][0].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["fri"][0]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["fri"][1].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["fri"][1]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["fri"][2].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["fri"][2]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["fri"][3].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["fri"][3]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["fri"][4].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["fri"][4]%>" class="day-image">
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="day-column" data-day="sat" style= "background:<%= saturday_color %>">
+          <div class="day-label">
+            <% if calendar.display == "Kanji" %>
+            <p>土</p>
+            <% else %>
+            <p>ど</p>
+            <% end %>
+            </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
+            <% unless JSON.parse(calendar.calendar_info)["sat"][0].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["sat"][0]%>" class="day-image">
+            <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["sat"][1].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["sat"][1]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["sat"][2].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["sat"][2]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["sat"][3].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["sat"][3]%>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless JSON.parse(calendar.calendar_info)["sat"][4].nil? %>
+              <img src="<%= JSON.parse(calendar.calendar_info)["sat"][4]%>" class="day-image">
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="day-column" data-day="sun" style= "background:<%= sunday_color %>">
+            <div class="day-label">
+            <% if calendar.display == "Kanji"%>
+            <p>日</p>
+            <% else %>
+            <p>にち</p>
+            <% end %>
+            </div>
+            <div class="drop-zones">
+              <div class="drop-zone">
+                <% unless JSON.parse(calendar.calendar_info)["sun"][0].nil? %>
+                <img src="<%= JSON.parse(calendar.calendar_info)["sun"][0]%>" class="day-image">
+                <% end %>
+              </div>
+              <div class="drop-zone">
+                <% unless JSON.parse(calendar.calendar_info)["sun"][1].nil? %>
+                <img src="<%= JSON.parse(calendar.calendar_info)["sun"][1]%>" class="day-image">
+                <% end %>
+              </div>
+              <div class="drop-zone">
+                <% unless JSON.parse(calendar.calendar_info)["sun"][2].nil? %>
+                <img src="<%= JSON.parse(calendar.calendar_info)["sun"][2]%>" class="day-image">
+                <% end %>
+              </div>
+              <div class="drop-zone">
+                <% unless JSON.parse(calendar.calendar_info)["sun"][3].nil? %>
+                <img src="<%= JSON.parse(calendar.calendar_info)["sun"][3]%>" class="day-image">
+                <% end %>
+              </div>
+              <div class="drop-zone">
+                <% unless JSON.parse(calendar.calendar_info)["sun"][4].nil? %>
+                <img src="<%= JSON.parse(calendar.calendar_info)["sun"][4]%>" class="day-image">
+                <% end %>
+              </div>
+            </div>
+        </div>
+        
+        </div>
+      <button class="btn btn-success print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
+      <button class="btn btn-success pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
+      <a href="/reedit_week/<%=@user.id%>/<%= calendar.id %>" class="btn btn-success btn-edit">編集</a>
+      </div>
+      
+      <% end %>
+    </div>
+    </div>
+  </div>
+  <script src="/script.js"></script>
+   <script src="/calendar_name_editor.js"></script>
+  <script>
+  document.querySelectorAll(".pdf-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const calendarCard = btn.closest(".calendar-card");
+      const weekCalendar = calendarCard.querySelector(".week-calendar");
+      const filename = (btn.dataset.calendarName || "カレンダー") + ".pdf";
+  
+      // 各曜日の背景色を取得
+      const dayColumns = weekCalendar.querySelectorAll(".day-column");
+      const colors = Array.from(dayColumns).map(col => {
+        return col.style.background || col.style.backgroundColor || "";
+      });
+  
+      // PDF生成用の表示エリア
+      const pdfStage = document.createElement("div");
+      pdfStage.style.position = "fixed";
+      pdfStage.style.left = "0";
+      pdfStage.style.top = "0";
+      pdfStage.style.width = "100vw";
+      pdfStage.style.height = "100vh";
+      pdfStage.style.background = "rgba(255, 255, 255, 0.01)";
+      pdfStage.style.zIndex = "999999";
+      pdfStage.style.overflow = "visible";
+  
+      // 実際にPDF化するA4横ページ
+      const pdfPage = document.createElement("div");
+      pdfPage.style.width = "297mm";
+      pdfPage.style.height = "210mm";
+      pdfPage.style.background = "white";
+      pdfPage.style.padding = "10mm";
+      pdfPage.style.boxSizing = "border-box";
+      pdfPage.style.overflow = "hidden";
+  
+      pdfPage.innerHTML = `
+        <style>
+          .pdf-week-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            background-color: white;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+          }
+  
+          .pdf-week-calendar .day-column {
+            border: 1px solid black;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-sizing: border-box;
+          }
+  
+          .pdf-week-calendar .day-column:nth-child(1) { background-color: ${colors[0]} !important; }
+          .pdf-week-calendar .day-column:nth-child(2) { background-color: ${colors[1]} !important; }
+          .pdf-week-calendar .day-column:nth-child(3) { background-color: ${colors[2]} !important; }
+          .pdf-week-calendar .day-column:nth-child(4) { background-color: ${colors[3]} !important; }
+          .pdf-week-calendar .day-column:nth-child(5) { background-color: ${colors[4]} !important; }
+          .pdf-week-calendar .day-column:nth-child(6) { background-color: ${colors[5]} !important; }
+          .pdf-week-calendar .day-column:nth-child(7) { background-color: ${colors[6]} !important; }
+  
+          .pdf-week-calendar .drop-zones {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            overflow: hidden;
+          }
+  
+          .pdf-week-calendar .day-label {
+            font-weight: bold;
+            text-align: center;
+            height: 50px;
+            border-bottom: 2px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+          }
+  
+          .pdf-week-calendar .day-label p {
+            font-size: 28px;
+            margin: 0;
+            font-weight: bold;
+          }
+  
+          .pdf-week-calendar .drop-zone {
+            flex: 1;
+            min-height: 0;
+            border: 1px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+            box-sizing: border-box;
+          }
+  
+          .pdf-week-calendar .drop-zone:last-child {
+            margin-bottom: 0;
+          }
+  
+          .pdf-week-calendar .day-image {
+            width: 70%;
+            max-height: 100%;
+            object-fit: contain;
+          }
+        </style>
+  
+        <div class="pdf-week-calendar">
+          ${weekCalendar.innerHTML}
+        </div>
+      `;
+  
+      pdfStage.appendChild(pdfPage);
+      document.body.appendChild(pdfStage);
+  
+      // 画像読み込み待ち
+      const images = pdfPage.querySelectorAll("img");
+  
+      const imagePromises = Array.from(images).map(img => {
+        return new Promise(resolve => {
+          if (img.complete) {
+            resolve();
+          } else {
+            img.onload = resolve;
+            img.onerror = resolve;
+          }
+        });
+      });
+  
+      await Promise.all(imagePromises);
+  
+      // レイアウト反映待ち
+      await new Promise(resolve => setTimeout(resolve, 500));
+  
+      const opt = {
+        margin: 0,
+        filename: filename,
+        image: {
+          type: "jpeg",
+          quality: 0.98
+        },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          scrollX: 0,
+          scrollY: 0
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "landscape"
+        }
+      };
+  
+      await html2pdf()
+        .set(opt)
+        .from(pdfPage)
+        .save();
+  
+      document.body.removeChild(pdfStage);
+    });
+  });
+
+// 印刷機能
+document.querySelectorAll(".print-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const calendarCard = btn.closest(".calendar-card");
+    const weekCalendar = calendarCard.querySelector(".week-calendar");
+    
+    // 各曜日の背景色を取得
+    const dayColumns = weekCalendar.querySelectorAll('.day-column');
+    const colors = Array.from(dayColumns).map(col => {
+      return col.style.background || '';
+    });
+    
+    // 新しいウィンドウを開く
+    const printWindow = window.open('', '', 'width=1200,height=800');
+    
+    // week-calendarのHTMLを取得
+    const calendarHTML = weekCalendar.innerHTML;
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          @page {
+            size: A4 landscape;
+          }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          html, body { 
+            margin: 0; 
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+          }
+          body {
+            padding: 10mm;
+          }
+          .week-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            background-color: white;
+            width: 100%;
+            height: 100%;
+            max-height: calc(210mm - 20mm);
+            padding: 0;
+            margin: 0;
+            page-break-after: avoid;
+          }
+          .day-column {
+            border: 1px solid black;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            page-break-inside: avoid;
+            overflow: hidden;
+          }
+          .day-column:nth-child(1) { background-color: ${colors[0]} !important; }
+          .day-column:nth-child(2) { background-color: ${colors[1]} !important; }
+          .day-column:nth-child(3) { background-color: ${colors[2]} !important; }
+          .day-column:nth-child(4) { background-color: ${colors[3]} !important; }
+          .day-column:nth-child(5) { background-color: ${colors[4]} !important; }
+          .day-column:nth-child(6) { background-color: ${colors[5]} !important; }
+          .day-column:nth-child(7) { background-color: ${colors[6]} !important; }
+          .drop-zones {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            overflow: hidden;
+          }
+          .day-label {
+            font-weight: bold;
+            text-align: center;
+            height: 50px;  /* 35pxから50pxに拡大 */
+            border-bottom: 2px solid black;  /* 線も太く */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+          }
+          .day-label p { 
+            font-size: 28px;  /* 18pxから28pxに拡大 */
+            margin: 0;
+            font-weight: bold;  /* 太字を強調 */
+          }
+          .drop-zone {
+            flex: 1;
+            min-height: 0;
+            border: 1px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+          }
+          .drop-zone:last-child {
+            margin-bottom: 0;
+          }
+          .day-image { 
+            width: 70%; 
+            max-height: 100%;
+            object-fit: contain; 
+          }
+          @media print {
+            html, body {
+              overflow: hidden;
+            }
+            * {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="week-calendar">
+          ${calendarHTML}
+        </div>
+        <script>
+          window.onload = () => {
+            const images = document.querySelectorAll('img');
+            let loadedCount = 0;
+            const totalImages = images.length;
+            
+            if (totalImages === 0) {
+              window.print();
+              return;
+            }
+            
+            images.forEach(img => {
+              if (img.complete) {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                  setTimeout(() => window.print(), 500);
+                }
+              } else {
+                img.onload = () => {
+                  loadedCount++;
+                  if (loadedCount === totalImages) {
+                    setTimeout(() => window.print(), 500);
+                  }
+                };
+              }
+            });
+            
+            window.onafterprint = () => window.close();
+          };
+        <\/script>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+  });
+});
+  
+  </script>
+</body>

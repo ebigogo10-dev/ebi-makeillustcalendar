@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カレンダー型決め</title>
+  <link href="/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="sidebar">
+    <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+      <button href="/edit_about_day/<%= @user.id %>">カレンダー作成</button>
+      <!--<a href="/howto">ガイドページ</a>-->
+      <!--<a href="/team">チーム一覧</a>-->
+      <a href="/setting/<%= @user.id %>">設定</a>
+  </div>
+    <div class="main">
+      
+    <div class="sidebar">
+      <a href="/edit_about_day/<%= @user.id %>">dayカレンダーを作成</a>
+      <button href="/edit_about_week/<%= @user.id %>">weekカレンダーを作成</button>
+      <a href="/edit_about_month/<%= @user.id %>">monthカレンダーを作成</a>
+    </div>
+      
+    <form action="/upload_image/<%= @user.id %>" method="post" enctype="multipart/form-data" class="action-form">
+  	<input type="hidden" name="return_to" value="/edit_about_week/<%= @user.id %>">
+  	<input type="file" name="images[]" accept="image/*" multiple>
+  	<button type="submit" class="btn btn-success">画像をアップロード</button>
+    </form>
+    
+    <form action="/newcreate_week/<%= @user.id%>" method="post">
+    <p>
+    <a>カレンダー名</a>
+    <input type="text" name="calendar_name" value="<%= Date.today.beginning_of_week %>の週のカレンダー">
+    </p>
+    <p>
+    <a>はじめの日付</a>
+    <input type="date" name="selected_date" value="<%= Date.today.beginning_of_week %>">
+    </p>
+    <p>
+    <a>曜日の色</a>
+    <select name="color">
+    <option value="nothing">指定なし</option>
+    <option value="3colors">平日→白 土曜→青 日曜→赤</option>
+    <option value="7colors">７色</option>
+    </select>
+    </p>
+    <p>
+    <a>曜日の表記</a>
+    <select name="display">
+    <option value="Kanji">漢字(月)</option>
+    <option value="Hiragana">ひらがな(げつ)</option>
+    </select>
+    </p>
+    <p>
+    <button type="submit" class="btn btn-success">カレンダーを作る</button>
+    </p>
+  </form>
+    
+    </div>
+</body>
