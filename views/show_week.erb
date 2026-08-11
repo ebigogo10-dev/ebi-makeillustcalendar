@@ -13,21 +13,17 @@
 <body>
   <div class="sidebar">
     <button href="/show_day/<%= @user.id %>">カレンダー一覧</button>
-      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
-      <!--<a href="/howto">ガイドページ</a>-->
-      <!--<a href="/team">チーム一覧</a>-->
-      <a href="/setting/<%= @user.id %>">設定</a>
+    <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+    <a href="/setting/<%= @user.id %>">設定</a>
+  </div>
+  
+  <div class="sidebar">
+    <a href="/show_day/<%= @user.id %>">dayカレンダーを見る</a>
+    <button href="/show_week/<%= @user.id %>">weekカレンダーを見る</button>
+    <a href="/show_month/<%= @user.id %>">monthカレンダーを見る</a>
   </div>
   
   <div class="main">
-    
-    <div class="sidebar">
-      <a href="/show_day/<%= @user.id %>">dayカレンダーを見る</a>
-      <button href="/show_week/<%= @user.id %>">weekカレンダーを見る</button>
-      <a href="/show_month/<%= @user.id %>">monthカレンダーを見る</a>
-    </div>
-    
-    </div>
     
     <div class="week">
     <div class="calendar-list">
@@ -355,8 +351,8 @@
         </div>
         
         </div>
-      <button class="btn btn-success print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
-      <button class="btn btn-success pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
+      <button class="print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
+      <button class="pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
       <a href="/reedit_week/<%=@user.id%>/<%= calendar.id %>" class="btn btn-success btn-edit">編集</a>
       </div>
       

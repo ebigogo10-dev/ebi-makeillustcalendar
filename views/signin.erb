@@ -9,16 +9,17 @@
 </head>
 <body>
   
-  <div class="main">
+  <div class="sign">
+    <h1>MAKEイラストカレンダー</h1>
     
-  <form action="/signin" method="post">
-    <input type="text" class="form-control" placeholder="メールアドレス" name="mail" required>
-    <input type="password" class="form-control" placeholder="パスワード" name="password" required>
-    <button type="submit" class="btn btn-success">ログイン</button>
-  </form>
-  
-  <a href="/signup" class="btn btn-success btn-center">アカウントをお持ちでない方はこちら</a>
-  
+    <div class="sign-box">
+      <form action="/signin" method="post">
+        <input type="text" class="form-control" placeholder="メールアドレス" name="mail" required>
+        <input type="password" class="form-control" placeholder="パスワード" name="password" required>
+        <button type="submit">ログイン</button>
+      </form>
+        <a href="/signup">アカウントをお持ちでない方はこちら</a>
+    </div>
   </div>
   
 </body>

@@ -17,16 +17,16 @@
       <button href="/setting/<%= @user.id %>">設定</button>
   </div>
   
-  <div class="main">
+  <div class="setting">
     
-  <form action="/" method="get" class="action-form">
-  <button type="submit" class="btn btn-success">サインアウトする</button>
-  </form>
-  
-  <form action="/create_username/<%= @user.id %>" method="post" class="action-form">
-  <input type="text" class="form-control" placeholder="ユーザーネーム" name="name" required>
-  <button type="submit" class="btn btn-success">決定</button>
-  </form>
+    <form action="/" method="get" class="action-form">
+    <button type="submit">サインアウトする</button>
+    </form>
+    
+    <form action="/create_username/<%= @user.id %>" method="post" class="input">
+    <input type="text" placeholder="ユーザーネーム" name="name" required>
+    <button type="submit">決定</button>
+    </form>
   
   </div>
 

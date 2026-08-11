@@ -9,333 +9,295 @@
   <title>メイン編集画面</title>
 </head>
 
-<body>
-    <div class="sidebar">
-      <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
-      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
-      <!--<a href="/howto">ガイドページ</a>-->
-      <!--<a href="/team">チーム一覧</a>-->
-      <a href="/setting/<%= @user.id %>">設定</a>
-    </div>
-    <div class="layout">
-    <div class="left-area">
-          <!-- 上部バー（横スクロール） -->
-    <!--<div class="top-bar">-->
-    <!--  <button>全部</button>-->
-    <!--  <button>動物</button>-->
-    <!--  <button>食べ物</button>-->
-    <!--  <button>季節</button>-->
-    <!--  <button>かわいい</button>-->
-    <!--  <button>イベント</button>-->
-    <!--  <button>その他</button>-->
-    <!--</div>-->
-
-    <!-- 下部リスト（縦スクロール） -->
-  <div class="scroll-area">
-    <div class="image-palette">
-    <% @images.each do |logo| %>
-      <div class="item">
-        <img src="<%= logo.images %>" class="palette-image" draggable="true">
-      </div>
-    <% end %>
-    </div>
+<body class="edit-page">
+  <div class="sidebar">
+    <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+    <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+    <a href="/setting/<%= @user.id %>">設定</a>
   </div>
+  
+  <div class="edit">
+    <div class="left-area">
+      <% @images.each do |logo| %>
+        <div class="item">
+          <img src="<%= logo.images %>" class="palette-image" draggable="true">
+        </div>
+      <% end %>
     </div>
     
     <div class="right-area">
-      
-    <ul class="include-accordion scroll-control">
-    <button class="accordionBtn" type="button" id="clockBtn">時間編集</button>
-      <ul id="clockList">
-        
-    <% time_labels = ["①", "②", "③", "④", "⑤", "⑥", "⑦"] %>
-    <% selected_time_data = (1..7).map { |time_index| @calendar[time_index.to_s] }.compact.find { |time_data| !time_data["style"].to_s.empty? } || @calendar["1"] || {} %>
-    <% selected_time_style = day_time_style(selected_time_data) %>
-    <div class="form time-style-form">
-    <a class="time_layout">表記</a>
-	  <input type="hidden" id="timeStyleInput" value="<%= selected_time_style %>">
-	  <div class="time-style-buttons">
-	    <button type="button" class="time-style-btn <%= "active" if selected_time_style == "kanji" %>" data-time-style-value="kanji" aria-pressed="<%= selected_time_style == "kanji" %>">漢字</button>
-	    <button type="button" class="time-style-btn <%= "active" if selected_time_style == "hiragana" %>" data-time-style-value="hiragana" aria-pressed="<%= selected_time_style == "hiragana" %>">ひらがな</button>
-	    <button type="button" class="time-style-btn <%= "active" if selected_time_style == "clock" %>" data-time-style-value="clock" aria-pressed="<%= selected_time_style == "clock" %>">時計</button>
-    </div>
-    </div>
-    <% time_labels.each_with_index do |label, index| %>
-    <% time_index = index + 1 %>
-    <div class="form time-row-form">
-    <a class="time_layout"><%= label %></a>
-    
-    <div class="hour-picker" data-hour-picker>
-      <input type="hidden" id="timeInput_<%= time_index %>" value="">
-      <button type="button" class="hour-picker-toggle" data-hour-picker-toggle aria-expanded="false" aria-controls="hourOptions_<%= time_index %>">--時--</button>
-      <div class="hour-picker-options" id="hourOptions_<%= time_index %>" role="listbox" hidden>
-        <button type="button" class="hour-picker-option" data-hour-value="" role="option">--時--</button>
-        <% (0..23).each do |hour| %>
-          <button type="button" class="hour-picker-option" data-hour-value="<%= hour %>" role="option"><%= hour %>時</button>
-        <% end %>
-      </div>
-    </div>
-    </div>
-    
-    <% end %>
-
+      <ul class="include-accordion scroll-control">
+        <button class="accordionBtn" type="button" id="clockBtn">時間編集</button>
+        <ul id="clockList">
+          <% time_labels = ["①", "②", "③", "④", "⑤", "⑥", "⑦"] %>
+          <% selected_time_data = (1..7).map { |time_index| @calendar[time_index.to_s] }.compact.find { |time_data| !time_data["style"].to_s.empty? } || @calendar["1"] || {} %>
+          <% selected_time_style = day_time_style(selected_time_data) %>
+          <div class="form time-style-form">
+            <a class="time_layout">表記</a>
+	          <input type="hidden" id="timeStyleInput" value="<%= selected_time_style %>">
+	            <div class="time-style-buttons">
+          	    <button type="button" class="time-style-btn <%= "active" if selected_time_style == "kanji" %>" data-time-style-value="kanji" aria-pressed="<%= selected_time_style == "kanji" %>">漢字</button>
+          	    <button type="button" class="time-style-btn <%= "active" if selected_time_style == "hiragana" %>" data-time-style-value="hiragana" aria-pressed="<%= selected_time_style == "hiragana" %>">ひらがな</button>
+          	    <button type="button" class="time-style-btn <%= "active" if selected_time_style == "clock" %>" data-time-style-value="clock" aria-pressed="<%= selected_time_style == "clock" %>">時計</button>
+              </div>
+          </div>
+          <% time_labels.each_with_index do |label, index| %>
+            <% time_index = index + 1 %>
+              <div class="form time-row-form">
+                <a class="time_layout"><%= label %></a>
+                <div class="hour-picker" data-hour-picker>
+                  <input type="hidden" id="timeInput_<%= time_index %>" value="">
+                  <button type="button" class="hour-picker-toggle" data-hour-picker-toggle aria-expanded="false" aria-controls="hourOptions_<%= time_index %>">--時--</button>
+                    <div class="hour-picker-options" id="hourOptions_<%= time_index %>" role="listbox" hidden>
+                      <button type="button" class="hour-picker-option" data-hour-value="" role="option">--時--</button>
+                      <% (0..23).each do |hour| %>
+                        <button type="button" class="hour-picker-option" data-hour-value="<%= hour %>" role="option"><%= hour %>時</button>
+                      <% end %>
+                    </div>
+                </div>
+              </div>
+          <% end %>
+        </ul>
       </ul>
-    </ul>
-
-      
-    <div class="day-calendar">
-      
-      <div class="date-column">
-        <% if  @calendar_display == "Kanji" %>
-        <p><%=@start_day.month %>月<%=@start_day.day %>日</p>
-        <% elsif @calendar_display == "Hiragana" %>
-        <p><%=@start_day.month %>がつ<%=@start_day.day %>にち</p>
-        <% end %>
-      </div>
-      
-      <% puts @calendar %>
-      
-      <div class="time-column" data-time="1" style= "background:<%= @color1 %>">
-        <div class="time-display" id="timePreview_1">
-            <p><%= @calendar["1"]["time"] %></p>
+      <div class="day-calendar">
+        <div class="date-column">
+          <% if  @calendar_display == "Kanji" %>
+          <p><%=@start_day.month %>月<%=@start_day.day %>日</p>
+          <% elsif @calendar_display == "Hiragana" %>
+          <p><%=@start_day.month %>がつ<%=@start_day.day %>にち</p>
+          <% end %>
         </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+        <div class="time-column" data-time="1" style= "background:<%= @color1 %>">
+          <div class="time-display" id="timePreview_1">
+            <p><%= @calendar["1"]["time"] %></p>
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["1"]["images"][0].nil?%>
                 <img src="<%= @calendar["1"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["1"]["images"][1].nil?%>
                 <img src="<%= @calendar["1"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["1"]["images"][2].nil?%>
                 <img src="<%= @calendar["1"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["1"]["images"][3].nil?%>
-                <img src="<%= @calendar["1"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["1"]["images"][4].nil?%>
-                  <img src="<%= @calendar["1"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["1"]["images"][3].nil?%>
+              <img src="<%= @calendar["1"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["1"]["images"][4].nil?%>
+                <img src="<%= @calendar["1"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="time-column" data-time="2" style= "background:<%= @color2 %>">
-        <div class="time-display" id="timePreview_2">
+        <div class="time-column" data-time="2" style= "background:<%= @color2 %>">
+          <div class="time-display" id="timePreview_2">
             <p><%= @calendar["2"]["time"] %></p>
-        </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["2"]["images"][0].nil?%>
                 <img src="<%= @calendar["2"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["2"]["images"][1].nil?%>
                 <img src="<%= @calendar["2"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["2"]["images"][2].nil?%>
                 <img src="<%= @calendar["2"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["2"]["images"][3].nil?%>
-                <img src="<%= @calendar["2"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["2"]["images"][4].nil?%>
-                  <img src="<%= @calendar["2"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["2"]["images"][3].nil?%>
+              <img src="<%= @calendar["2"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["2"]["images"][4].nil?%>
+                <img src="<%= @calendar["2"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="time-column" data-time="3" style= "background:<%= @color3 %>">
-        <div class="time-display" id="timePreview_3">
+        <div class="time-column" data-time="3" style= "background:<%= @color3 %>">
+          <div class="time-display" id="timePreview_3">
             <p><%= @calendar["3"]["time"] %></p>
-        </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["3"]["images"][0].nil?%>
                 <img src="<%= @calendar["3"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["3"]["images"][1].nil?%>
                 <img src="<%= @calendar["3"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["3"]["images"][2].nil?%>
                 <img src="<%= @calendar["3"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["3"]["images"][3].nil?%>
-                <img src="<%= @calendar["3"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["3"]["images"][4].nil?%>
-                  <img src="<%= @calendar["3"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["3"]["images"][3].nil?%>
+              <img src="<%= @calendar["3"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["3"]["images"][4].nil?%>
+                <img src="<%= @calendar["3"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="time-column" data-time="4" style= "background:<%= @color4 %>">
-        <div class="time-display" id="timePreview_4">
-            <p><%= @calendar["4"]["time"] %></p>
-        </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+        <div class="time-column" data-time="4" style= "background:<%= @color4 %>">
+          <div class="time-display" id="timePreview_4">
+              <p><%= @calendar["4"]["time"] %></p>
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["4"]["images"][0].nil?%>
                 <img src="<%= @calendar["4"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["4"]["images"][1].nil?%>
                 <img src="<%= @calendar["4"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["4"]["images"][2].nil?%>
                 <img src="<%= @calendar["4"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["4"]["images"][3].nil?%>
-                <img src="<%= @calendar["4"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["4"]["images"][4].nil?%>
-                  <img src="<%= @calendar["4"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["4"]["images"][3].nil?%>
+              <img src="<%= @calendar["4"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["4"]["images"][4].nil?%>
+                <img src="<%= @calendar["4"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="time-column" data-time="5" style= "background:<%= @color5 %>">
-        <div class="time-display" id="timePreview_5">
+        <div class="time-column" data-time="5" style= "background:<%= @color5 %>">
+          <div class="time-display" id="timePreview_5">
             <p><%= @calendar["5"]["time"] %></p>
-        </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["5"]["images"][0].nil?%>
                 <img src="<%= @calendar["5"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["5"]["images"][1].nil?%>
                 <img src="<%= @calendar["5"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["5"]["images"][2].nil?%>
                 <img src="<%= @calendar["5"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["5"]["images"][3].nil?%>
-                <img src="<%= @calendar["5"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["5"]["images"][4].nil?%>
-                  <img src="<%= @calendar["5"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["5"]["images"][3].nil?%>
+              <img src="<%= @calendar["5"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["5"]["images"][4].nil?%>
+                <img src="<%= @calendar["5"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="time-column" data-time="6" style= "background:<%= @color6 %>">
-        <div class="time-display" id="timePreview_6">
+        <div class="time-column" data-time="6" style= "background:<%= @color6 %>">
+          <div class="time-display" id="timePreview_6">
             <p><%= @calendar["6"]["time"] %></p>
-        </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["6"]["images"][0].nil?%>
                 <img src="<%= @calendar["6"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["6"]["images"][1].nil?%>
                 <img src="<%= @calendar["6"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["6"]["images"][2].nil?%>
                 <img src="<%= @calendar["6"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["6"]["images"][3].nil?%>
-                <img src="<%= @calendar["6"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["6"]["images"][4].nil?%>
-                  <img src="<%= @calendar["6"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["6"]["images"][3].nil?%>
+              <img src="<%= @calendar["6"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["6"]["images"][4].nil?%>
+                <img src="<%= @calendar["6"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="time-column" data-time="7" style= "background:<%= @color7 %>">
-        <div class="time-display" id="timePreview_7">
+        <div class="time-column" data-time="7" style= "background:<%= @color7 %>">
+          <div class="time-display" id="timePreview_7">
             <p><%= @calendar["7"]["time"] %></p>
-        </div>
-        <div class="drop-zones">
-          <div class="drop-zone">
+          </div>
+          <div class="drop-zones">
+            <div class="drop-zone">
               <% unless @calendar["7"]["images"][0].nil?%>
                 <img src="<%= @calendar["7"]["images"][0] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["7"]["images"][1].nil?%>
                 <img src="<%= @calendar["7"]["images"][1] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
+            </div>
+            <div class="drop-zone">
               <% unless @calendar["7"]["images"][2].nil?%>
                 <img src="<%= @calendar["7"]["images"][2] %>" class="day-image">
               <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["7"]["images"][3].nil?%>
-                <img src="<%= @calendar["7"]["images"][3] %>" class="day-image">
-                <% end %>
-          </div>
-          <div class="drop-zone">
-                <% unless @calendar["7"]["images"][4].nil?%>
-                  <img src="<%= @calendar["7"]["images"][4] %>" class="day-image">
-                <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["7"]["images"][3].nil?%>
+              <img src="<%= @calendar["7"]["images"][3] %>" class="day-image">
+              <% end %>
+            </div>
+            <div class="drop-zone">
+              <% unless @calendar["7"]["images"][4].nil?%>
+                <img src="<%= @calendar["7"]["images"][4] %>" class="day-image">
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
       
-      
     </div>
-    
-    <button class="save-button">
-    保存
-    </button>
-    </div>
-    
-   <script src="/script.js"></script>
-    <script>
+    <button class="save-button">保存</button>
+  </div>
+  <script src="/script.js"></script>
+  <script>
  function buildDayCalendarJson() {
     const result = {};
 

@@ -9,160 +9,143 @@
   <title>メイン編集画面</title>
 </head>
 
-<body>
-    <div class="sidebar">
-      <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
-      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
-      <!--<a href="/howto">ガイドページ</a>-->
-      <!--<a href="/team">チーム一覧</a>-->
-      <a href="/setting/<%= @user.id %>">設定</a>
-    </div>
-    
-  <div class="layout">
-    
-  <div class="left-area">
-  <div class="scroll-area">
-  <div class="image-palette">
-  <% @images.each do |logo| %>
-    <div class="item">
-      <img src="<%= logo.images %>" class="palette-image" draggable="true">
-    </div>
-  <% end %>
+<body class="edit-page">
+  <div class="sidebar">
+    <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+    <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+    <a href="/setting/<%= @user.id %>">設定</a>
   </div>
-  </div>
-  </div>
-  
-  <div class="right-area">
-    
-  <div class="month-calendar">
-    
-    <%
-        # 月の最初の日と最後の日を取得
-        first_day = Date.parse("#{@date}-01")
-        puts first_day
-        last_day = Date.new(first_day.year, first_day.month, -1)
-        
-        # 最初の日が何曜日か（0=日曜、6=土曜）
-        start_wday = first_day.wday
-        
-        # 全体の週数を計算
-        total_days = last_day.day + start_wday
-        weeks = (total_days / 7.0).ceil
-        
-    %>
-      <div class="month-header">
-      <% if @calendar_display == "Kanji" %>
-        <p><%= @month.to_i %>月</p>
-      <% else %>
-        <p><%= @month.to_i %>がつ</p>
+  <div class="edit">
+    <div class="left-area">
+      <% @images.each do |logo| %>
+        <div class="item">
+          <img src="<%= logo.images %>" class="palette-image" draggable="true">
+        </div>
       <% end %>
-      </div>
-      <!-- 曜日ヘッダー -->
-      <div class="weekday-header">
-        <div class="weekday-cell" style="background:<%= @sunday_color %>">
+    </div>
+  
+    <div class="right-area">
+      <div class="month-calendar">
+      <%
+          # 月の最初の日と最後の日を取得
+          first_day = Date.parse("#{@date}-01")
+          puts first_day
+          last_day = Date.new(first_day.year, first_day.month, -1)
+          
+          # 最初の日が何曜日か（0=日曜、6=土曜）
+          start_wday = first_day.wday
+          
+          # 全体の週数を計算
+          total_days = last_day.day + start_wday
+          weeks = (total_days / 7.0).ceil
+          
+      %>
+        <div class="month-header">
           <% if @calendar_display == "Kanji" %>
-          <p>日</p>
+            <p><%= @month.to_i %>月</p>
           <% else %>
-          <p>にち</p>
+            <p><%= @month.to_i %>がつ</p>
           <% end %>
         </div>
-        <div class="weekday-cell" style="background:<%= @monday_color %>">
-          <% if @calendar_display == "Kanji" %>
-          <p>月</p>
-          <% else %>
-          <p>げつ</p>
-          <% end %>
-        </div>
-        <div class="weekday-cell" style="background:<%= @tuesday_color %>">
-          <% if @calendar_display == "Kanji" %>
-          <p>火</p>
-          <% else %>
-          <p>か</p>
-          <% end %>
-        </div>
-        <div class="weekday-cell" style="background:<%= @wednesday_color %>">
-          <% if @calendar_display == "Kanji" %>
-          <p>水</p>
-          <% else %>
-          <p>すい</p>
-          <% end %>
-        </div>
-        <div class="weekday-cell" style="background:<%= @thursday_color %>">
-          <% if @calendar_display == "Kanji" %>
-          <p>木</p>
-          <% else %>
-          <p>もく</p>
-          <% end %>
-        </div>
-        <div class="weekday-cell" style="background:<%= @friday_color %>">
-          <% if @calendar_display == "Kanji" %>
-          <p>金</p>
-          <% else %>
-          <p>きん</p>
-          <% end %>
-        </div>
-        <div class="weekday-cell" style="background:<%= @saturday_color %>">
-          <% if @calendar_display == "Kanji" %>
-          <p>土</p>
-          <% else %>
-          <p>ど</p>
-          <% end %>
-        </div>
-      </div>
-      
-      <!-- 日付グリッド -->
-      <div class="calendar-grid" style="--weeks: <%= weeks %>">
-        <% 
-          day_counter = 1
-          (0...weeks).each do |week|
-        %>
-          <% (0..6).each do |wday| %>
-            <%
-              # 日付を計算
-              day_index = week * 7 + wday
-              display_day = day_index - start_wday + 1
-              
-              # 背景色を決定
-              bg_color = case wday
-                when 0 then @sunday_color
-                when 1 then @monday_color
-                when 2 then @tuesday_color
-                when 3 then @wednesday_color
-                when 4 then @thursday_color
-                when 5 then @friday_color
-                when 6 then @saturday_color
-              end
-            %>
-            <% if display_day >= 1 && display_day <= last_day.day %>
-              <div class="day-cell" data-date="<%= first_day.strftime('%Y-%m') %>-<%= display_day.to_s.rjust(2, '0') %>" style="background:<%= bg_color %>">
-                <div class="day-number">
-                  <p><%= display_day %></p>
-                </div>
-                <div class="day-content">
-                  <% @image_slot_count.to_i.times do |slot_index| %>
-                <div class="drop-zone" data-slot-index="<%= slot_index %>">
-                </div>
-            <% end %>
-                </div>
-              </div>
+        <!-- 曜日ヘッダー -->
+        <div class="weekday-header">
+          <div class="weekday-cell" style="background:<%= @sunday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>日</p>
             <% else %>
-              <div class="day-cell empty"></div>
+            <p>にち</p>
+            <% end %>
+          </div>
+          <div class="weekday-cell" style="background:<%= @monday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>月</p>
+            <% else %>
+            <p>げつ</p>
+            <% end %>
+          </div>
+          <div class="weekday-cell" style="background:<%= @tuesday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>火</p>
+            <% else %>
+            <p>か</p>
+            <% end %>
+          </div>
+          <div class="weekday-cell" style="background:<%= @wednesday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>水</p>
+            <% else %>
+            <p>すい</p>
+            <% end %>
+          </div>
+          <div class="weekday-cell" style="background:<%= @thursday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>木</p>
+            <% else %>
+            <p>もく</p>
+            <% end %>
+          </div>
+          <div class="weekday-cell" style="background:<%= @friday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>金</p>
+            <% else %>
+            <p>きん</p>
+            <% end %>
+          </div>
+          <div class="weekday-cell" style="background:<%= @saturday_color %>">
+            <% if @calendar_display == "Kanji" %>
+            <p>土</p>
+            <% else %>
+            <p>ど</p>
+            <% end %>
+          </div>
+        </div>
+        <!-- 日付グリッド -->
+        <div class="calendar-grid" style="--weeks: <%= weeks %>">
+          <% 
+            day_counter = 1
+            (0...weeks).each do |week|
+          %>
+            <% (0..6).each do |wday| %>
+              <%
+                # 日付を計算
+                day_index = week * 7 + wday
+                display_day = day_index - start_wday + 1
+                
+                # 背景色を決定
+                bg_color = case wday
+                  when 0 then @sunday_color
+                  when 1 then @monday_color
+                  when 2 then @tuesday_color
+                  when 3 then @wednesday_color
+                  when 4 then @thursday_color
+                  when 5 then @friday_color
+                  when 6 then @saturday_color
+                end
+              %>
+              <% if display_day >= 1 && display_day <= last_day.day %>
+                <div class="day-cell" data-date="<%= first_day.strftime('%Y-%m') %>-<%= display_day.to_s.rjust(2, '0') %>" style="background:<%= bg_color %>">
+                  <div class="day-number">
+                    <p><%= display_day %></p>
+                  </div>
+                  <div class="day-content">
+                    <% @image_slot_count.to_i.times do |slot_index| %>
+                      <div class="drop-zone" data-slot-index="<%= slot_index %>">
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="day-cell empty"></div>
+              <% end %>
             <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
+    <button class="save-button">保存</button>
   </div>
-  
-      <button class="save-button">
-    保存
-    </button>
-  </div>
-  </div>
-  
   <script src="/script.js"></script>
-    <script>
-      
+  <script>
       function buildMonthCalendarJson() {
         const result = {};
 
@@ -214,5 +197,5 @@
         alert('通信エラーが発生しました');
       }
     });
-    </script>
+  </script>
 </body>

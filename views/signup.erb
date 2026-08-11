@@ -10,16 +10,17 @@
 
 <body>
   
-  <div class="main">
-  
-  <form action="/signup" method="post">
-    <input type="text" class="form-control" placeholder="メールアドレス" name="mail" required>
-    <input type="password" class="form-control" placeholder="登録したいパスワード" name="password" required>
-    <button type="submit" class="btn btn-success">新規登録</button>
-  </form>
-  
-  <a href="/signin" class="btn btn-success btn-center">すでにアカウントをお持ちの方はこちら</a>
-  
+  <div class="sign">
+    <h1>MAKEイラストカレンダー</h1>
+    
+    <div class="sign-box">
+      <form action="/signup" method="post">
+        <input type="text" class="form-control" placeholder="メールアドレス" name="mail" required>
+        <input type="password" class="form-control" placeholder="パスワード" name="password" required>
+        <button type="submit">新規登録</button>
+      </form>
+        <a href="/signin">アカウントをお持ちでない方はこちら</a>
+    </div>
   </div>
   
 </body>

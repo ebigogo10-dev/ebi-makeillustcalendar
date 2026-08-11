@@ -16,55 +16,42 @@
       <!--<a href="/team">チーム一覧</a>-->
       <a href="/setting/<%= @user.id %>">設定</a>
   </div>
-    <div class="main">
-      
-    <div class="sidebar">
-      <button href="/edit_about_day/<%= @user.id %>">dayカレンダーを作成</button>
-      <a href="/edit_about_week/<%= @user.id %>">weekカレンダーを作成</a>
-      <a href="/edit_about_month/<%= @user.id %>">monthカレンダーを作成</a>
-    </div>
-      
+  
+  <div class="sidebar">
+    <button href="/edit_about_day/<%= @user.id %>">dayカレンダーを作成</button>
+    <a href="/edit_about_week/<%= @user.id %>">weekカレンダーを作成</a>
+    <a href="/edit_about_month/<%= @user.id %>">monthカレンダーを作成</a>
+  </div>
+    
+  <div class="about">
     <form action="/upload_image/<%= @user.id %>" method="post" enctype="multipart/form-data" class="action-form">
-    <input type="file" name="images[]" multiple>
-    <button type="submit" class="btn btn-success">画像をアップロード</button>
-    </form>
-      
-    <form action="/newcreate_day/<%= @user.id%>" method="post">
-    <p>
-    <a>カレンダー名</a>
-    <input type="text" name="calendar_name" value="<%=@today%>のカレンダー">
-    </p>
-    <p>
-    <a>カレンダーの日付</a>
-    <input type="date" name="selected_date" value="<%=@today%>">
-    </p>
-    <p>
-    <a>時間の色</a>
-    <select name="color">
-    <option value="nothing">指定なし</option>
-    <option value="7colors">7色</option>
-    </select>
-    </p>
-    <p>
-    <a>時間の表記</a>
-    <select name="time_display">
-    <option value="kanji">漢字</option>
-    <option value="hiragana">ひらがな</option>
-    <option value="clock">時計イラスト</option>
-    </select>
-    </p>
-    <p>
-    <a>日付の表記</a>
-    <select name="date_display">
-    <option value="Kanji">漢字(月)</option>
-    <option value="Hiragana">ひらがな(げつ)</option>
-    </select>
-    </p>
-    <p>
-    <button type="submit" class="btn btn-success">カレンダーを作る</button>
-    </p>
+      <input type="file" name="images[]" multiple>
+      <button type="submit">画像をアップロード</button>
     </form>
     
+    <form action="/newcreate_day/<%= @user.id%>" method="post" class="input">
+      <a>カレンダー名</a>
+      <input type="text" name="calendar_name" value="<%=@today%>のカレンダー">
+      <a>カレンダーの日付</a>
+      <input type="date" name="selected_date" value="<%=@today%>">
+      <a>時間の色</a>
+      <select name="color">
+      <option value="nothing">指定なし</option>
+      <option value="7colors">7色</option>
+      </select>
+      <a>時間の表記</a>
+      <select name="time_display">
+      <option value="kanji">漢字</option>
+      <option value="hiragana">ひらがな</option>
+      <option value="clock">時計イラスト</option>
+      </select>
+      <a>日付の表記</a>
+      <select name="date_display">
+      <option value="Kanji">漢字(月)</option>
+      <option value="Hiragana">ひらがな(げつ)</option>
+      </select>
+      <button type="submit">カレンダーを作る</button>
+    </form>
   </div>
   
 </body>

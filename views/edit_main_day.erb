@@ -9,392 +9,362 @@
   <title>メイン編集画面</title>
 </head>
 
-<body>
-    <div class="sidebar">
-      <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
-      <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
-      <!--<a href="/howto">ガイドページ</a>-->
-      <!--<a href="/team">チーム一覧</a>-->
-      <a href="/setting/<%= @user.id %>">設定</a>
-    </div>
-    <div class="layout">
-    <div class="left-area">
-          <!-- 上部バー（横スクロール） -->
-    <!--<div class="top-bar">-->
-    <!--  <button>全部</button>-->
-    <!--  <button>動物</button>-->
-    <!--  <button>食べ物</button>-->
-    <!--  <button>季節</button>-->
-    <!--  <button>かわいい</button>-->
-    <!--  <button>イベント</button>-->
-    <!--  <button>その他</button>-->
-    <!--</div>-->
-
-    <!-- 下部リスト（縦スクロール） -->
-  <div class="scroll-area">
-    <div class="image-palette">
-    <% @images.each do |logo| %>
-      <div class="item">
-        <img src="<%= logo.images %>" class="palette-image" draggable="true">
-      </div>
-    <% end %>
-    </div>
+<body class="edit-page">
+  <div class="sidebar">
+    <a href="/show_day/<%= @user.id %>">カレンダー一覧</a>
+    <a href="/edit_about_day/<%= @user.id %>">カレンダー作成</a>
+    <a href="/setting/<%= @user.id %>">設定</a>
   </div>
+    
+  <div class="edit">
+    <div class="left-area">
+      <% @images.each do |logo| %>
+        <div class="item">
+          <img src="<%= logo.images %>" class="palette-image" draggable="true">
+        </div>
+      <% end %>
     </div>
     
     <div class="right-area">
-      
-    <ul class="include-accordion scroll-control">
-    <button class="accordionBtn" type="button" id="clockBtn">時間編集</button>
-      <ul id="clockList">
-  
-    <% time_labels = ["①", "②", "③", "④", "⑤", "⑥", "⑦"] %>
-    <% selected_time_style = day_time_style(@time_display) %>
-    <div class="form time-style-form">
-	          <a class="time_layout">表記</a>
-	          <input type="hidden" id="timeStyleInput" value="<%= selected_time_style %>">
-	          <div class="time-style-buttons">
-	            <button type="button" class="time-style-btn <%= "active" if selected_time_style == "kanji" %>" data-time-style-value="kanji" aria-pressed="<%= selected_time_style == "kanji" %>">漢字</button>
-	            <button type="button" class="time-style-btn <%= "active" if selected_time_style == "hiragana" %>" data-time-style-value="hiragana" aria-pressed="<%= selected_time_style == "hiragana" %>">ひらがな</button>
-	            <button type="button" class="time-style-btn <%= "active" if selected_time_style == "clock" %>" data-time-style-value="clock" aria-pressed="<%= selected_time_style == "clock" %>">時計</button>
-	          </div>
-	          </div>
-    <% time_labels.each_with_index do |label, index| %>
-    <% time_index = index + 1 %>
-    <div class="form time-row-form">
-    <a class="time_layout"><%= label %></a>
-    <div class="hour-picker" data-hour-picker>
-      <input type="hidden" id="timeInput_<%= time_index %>" value="">
-      <button type="button" class="hour-picker-toggle" data-hour-picker-toggle aria-expanded="false" aria-controls="hourOptions_<%= time_index %>">--時--</button>
-      <div class="hour-picker-options" id="hourOptions_<%= time_index %>" role="listbox" hidden>
-        <button type="button" class="hour-picker-option" data-hour-value="" role="option">--時--</button>
-        <% (0..23).each do |hour| %>
-          <button type="button" class="hour-picker-option" data-hour-value="<%= hour %>" role="option"><%= hour %>時</button>
+      <ul class="include-accordion scroll-control">
+      <button class="accordionBtn" type="button" id="clockBtn">時間編集</button>
+        <ul id="clockList">
+        <% time_labels = ["①", "②", "③", "④", "⑤", "⑥", "⑦"] %>
+        <% selected_time_style = day_time_style(@time_display) %>
+        <div class="form time-style-form">
+          <a class="time_layout">表記</a>
+    	     <input type="hidden" id="timeStyleInput" value="<%= selected_time_style %>">
+    	     <div class="time-style-buttons">
+    	       <button type="button" class="time-style-btn <%= "active" if selected_time_style == "kanji" %>" data-time-style-value="kanji" aria-pressed="<%= selected_time_style == "kanji" %>">漢字</button>
+    	       <button type="button" class="time-style-btn <%= "active" if selected_time_style == "hiragana" %>" data-time-style-value="hiragana" aria-pressed="<%= selected_time_style == "hiragana" %>">ひらがな</button>
+    	       <button type="button" class="time-style-btn <%= "active" if selected_time_style == "clock" %>" data-time-style-value="clock" aria-pressed="<%= selected_time_style == "clock" %>">時計</button>
+    	     </div>
+    	   </div>
+        <% time_labels.each_with_index do |label, index| %>
+          <% time_index = index + 1 %>
+          <div class="form time-row-form">
+            <a class="time_layout"><%= label %></a>
+              <div class="hour-picker" data-hour-picker>
+                <input type="hidden" id="timeInput_<%= time_index %>" value="">
+                <button type="button" class="hour-picker-toggle" data-hour-picker-toggle aria-expanded="false" aria-controls="hourOptions_<%= time_index %>">--時--</button>
+                  <div class="hour-picker-options" id="hourOptions_<%= time_index %>" role="listbox" hidden>
+                    <button type="button" class="hour-picker-option" data-hour-value="" role="option">--時--</button>
+                    <% (0..23).each do |hour| %>
+                    <button type="button" class="hour-picker-option" data-hour-value="<%= hour %>" role="option"><%= hour %>時</button>
+                    <% end %>
+                  </div>
+              </div>
+          </div>
         <% end %>
-      </div>
-    </div>
-    </div>
-    <% end %>
-
+        </ul>
       </ul>
-    </ul>
 
-      
-    <div class="day-calendar">
-      
-      <div class="date-column">
-        <% if  @calendar_display == "Kanji" %>
-        <p><%=@start_day.month %>月<%=@start_day.day %>日</p>
-        <% elsif @calendar_display == "Hiragana" %>
-        <p><%=@start_day.month %>がつ<%=@start_day.day %>にち</p>
+      <div class="day-calendar">
+        <div class="date-column">
+          <% if  @calendar_display == "Kanji" %>
+          <p><%=@start_day.month %>月<%=@start_day.day %>日</p>
+          <% elsif @calendar_display == "Hiragana" %>
+          <p><%=@start_day.month %>がつ<%=@start_day.day %>にち</p>
+          <% end %>
+        </div>
+        <% (1..7).each do |time_index| %>
+          <div class="time-column" data-time="<%= time_index %>" style= "background:<%= instance_variable_get("@color#{time_index}") %>">
+            <div class="time-display" id="timePreview_<%= time_index %>">
+            </div>
+            <div class="drop-zones">
+            <% 5.times do %>
+              <div class="drop-zone"></div>
+              <% end %>
+            </div>
+          </div>
         <% end %>
-      </div>
-      
-    <% (1..7).each do |time_index| %>
-    <div class="time-column" data-time="<%= time_index %>" style= "background:<%= instance_variable_get("@color#{time_index}") %>">
-      <div class="time-display" id="timePreview_<%= time_index %>">
-      </div>
-      <div class="drop-zones">
-      <% 5.times do %>
-        <div class="drop-zone"></div>
-        <% end %>
-      </div>
-    </div>
-    <% end %>
-      
     </div>
     
     <button class="save-button">
     保存
     </button>
-    </div>
+  </div>
     
-   <script src="/script.js"></script>
-    <script>
-      function buildDayCalendarJson() {
-        const result = {};
+  <script src="/script.js"></script>
+  <script>
+  function buildDayCalendarJson() {
+    const result = {};
+    document.querySelectorAll('.time-column').forEach(column => {
+      const timeKey = column.dataset.time;
+      const preview = column.querySelector(".time-display");
+      const timeStyleInput = document.getElementById("timeStyleInput");
+      const timeInput = document.getElementById(`timeInput_${timeKey}`);
+      const zones = column.querySelectorAll('.drop-zone');
+      onst images = Array.from(zones).map(zone => {
+      const img = zone.querySelector("img.day-image");
+      if (!img) return null;
+        onst url = new URL(img.src, window.location.origin);
+      return url.origin === window.location.origin ? url.pathname : url.href;
+      });
+  
+      result[timeKey] = {
+      time: preview?.dataset.timeText || preview?.textContent?.trim() || "",
+      timeValue: timeInput?.value || preview?.dataset.timeValue || "",
+      style: normalizeTimeStyle(timeStyleInput?.value || preview?.dataset.timeStyle),
+      images: images
+      };
+    });
+    return result;
+  }
 
-        document.querySelectorAll('.time-column').forEach(column => {
-          const timeKey = column.dataset.time;
-          const preview = column.querySelector(".time-display");
-          const timeStyleInput = document.getElementById("timeStyleInput");
-          const timeInput = document.getElementById(`timeInput_${timeKey}`);
-
-          const zones = column.querySelectorAll('.drop-zone');
-          const images = Array.from(zones).map(zone => {
-            const img = zone.querySelector("img.day-image");
-            if (!img) return null;
-            const url = new URL(img.src, window.location.origin);
-            return url.origin === window.location.origin ? url.pathname : url.href;
-          });
-
-          result[timeKey] = {
-            time: preview?.dataset.timeText || preview?.textContent?.trim() || "",
-            timeValue: timeInput?.value || preview?.dataset.timeValue || "",
-            style: normalizeTimeStyle(timeStyleInput?.value || preview?.dataset.timeStyle),
-
-            images: images
-          };
-        });
-
-        return result;
-      }
-
-
+        document.querySelector('.save-button').addEventListener('click', async () => {
+        const data = buildDayCalendarJson();
       
-      document.querySelector('.save-button').addEventListener('click', async () => {
-      const data = buildDayCalendarJson();
-    
-      try {
-        const res = await fetch("/calendar_day/<%= @user.id %>", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
-    
-        if (!res.ok) {
-          console.error('保存失敗', await res.text());
-          alert('保存に失敗しました');
-          return;
+        try {
+          const res = await fetch("/calendar_day/<%= @user.id %>", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+      
+          if (!res.ok) {
+            console.error('保存失敗', await res.text());
+            alert('保存に失敗しました');
+            return;
+          }
+      
+          const json = await res.json();
+          console.log('保存完了:', json);
+          alert('保存できました！');
+          if (json.redirect_to) {
+          window.location.href = json.redirect_to;
+          }
+        } catch (e) {
+          console.error('通信エラー', e);
+          alert('通信エラーが発生しました');
         }
-    
-        const json = await res.json();
-        console.log('保存完了:', json);
-        alert('保存できました！');
-        if (json.redirect_to) {
-        window.location.href = json.redirect_to;
-        }
-      } catch (e) {
-        console.error('通信エラー', e);
-        alert('通信エラーが発生しました');
-      }
-    });
-const clockImagePaths = {
-  1: "/clock_images/one.gif",
-  2: "/clock_images/two.gif",
-  3: "/clock_images/three.gif",
-  4: "/clock_images/four.gif",
-  5: "/clock_images/five.gif",
-  6: "/clock_images/six.gif",
-  7: "/clock_images/seven.gif",
-  8: "/clock_images/eight.gif",
-  9: "/clock_images/nine.gif",
-  10: "/clock_images/ten.gif",
-  11: "/clock_images/eleven.gif",
-  12: "/clock_images/twelve.gif"
-};
-
-function normalizeTimeStyle(value) {
-  const style = String(value || "").toLowerCase();
-  if (style === "clock" || style === "image") return "clock";
-  if (style === "hiragana") return "hiragana";
-  return "kanji";
-}
-
-function clockHour(hour) {
-  const h = hour % 12;
-  return h === 0 ? 12 : h;
-}
-  
-
- document.addEventListener("DOMContentLoaded", () => {
-  const timeStyleInput = document.getElementById("timeStyleInput");
-  const timeStyleButtons = document.querySelectorAll("[data-time-style-value]");
-
-  const setTimeStyleValue = (style) => {
-    const normalizedStyle = normalizeTimeStyle(style);
-    if (timeStyleInput) timeStyleInput.value = normalizedStyle;
-
-    timeStyleButtons.forEach(button => {
-      const isActive = button.dataset.timeStyleValue === normalizedStyle;
-      button.classList.toggle("active", isActive);
-      button.setAttribute("aria-pressed", String(isActive));
-    });
-
-    return normalizedStyle;
-  };
-
-  const renderAllTimePreviews = () => {
-    for (let i = 1; i <= 7; i++) {
-      const input = document.getElementById(`timeInput_${i}`);
-      const preview = document.getElementById(`timePreview_${i}`);
-      renderTimePreview(input, timeStyleInput?.value, preview);
-    }
-  };
-
-  setTimeStyleValue(timeStyleInput?.value);
-  initializeHourPickers();
+      });
   const clockImagePaths = {
-  1: "/clock_images/one.gif",
-  2: "/clock_images/two.gif",
-  3: "/clock_images/three.gif",
-  4: "/clock_images/four.gif",
-  5: "/clock_images/five.gif",
-  6: "/clock_images/six.gif",
-  7: "/clock_images/seven.gif",
-  8: "/clock_images/eight.gif",
-  9: "/clock_images/nine.gif",
-  10: "/clock_images/ten.gif",
-  11: "/clock_images/eleven.gif",
-  12: "/clock_images/twelve.gif"
-};
-
-timeStyleButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    setTimeStyleValue(button.dataset.timeStyleValue);
-    renderAllTimePreviews();
-  });
-});
-
-function normalizeTimeStyle(value) {
-  const style = String(value || "").toLowerCase();
-  if (style === "clock" || style === "image") return "clock";
-  if (style === "hiragana") return "hiragana";
-  return "kanji";
-}
-
-function clockHour(hour) {
-  const h = hour % 12;
-  return h === 0 ? 12 : h;
-}
-
-  function parseTime(value) {
-    const rawValue = String(value || "").trim();
-    if (!rawValue) return null;
-    const hh = rawValue.includes(":") ? rawValue.split(":")[0] : rawValue;
-    const h = Number(hh);
-    if (!Number.isInteger(h) || h < 0 || h > 23) return null;
-    return { h };
+    1: "/clock_images/one.gif",
+    2: "/clock_images/two.gif",
+    3: "/clock_images/three.gif",
+    4: "/clock_images/four.gif",
+    5: "/clock_images/five.gif",
+    6: "/clock_images/six.gif",
+    7: "/clock_images/seven.gif",
+    8: "/clock_images/eight.gif",
+    9: "/clock_images/nine.gif",
+    10: "/clock_images/ten.gif",
+    11: "/clock_images/eleven.gif",
+    12: "/clock_images/twelve.gif"
+  };
+  
+  function normalizeTimeStyle(value) {
+    const style = String(value || "").toLowerCase();
+    if (style === "clock" || style === "image") return "clock";
+    if (style === "hiragana") return "hiragana";
+    return "kanji";
   }
   
-  function hourLabel(value) {
-    const t = parseTime(value);
-    return t ? `${t.h}時` : "--時--";
+  function clockHour(hour) {
+    const h = hour % 12;
+    return h === 0 ? 12 : h;
   }
-
-  function setHourPickerOpen(picker, isOpen) {
-    const toggle = picker?.querySelector("[data-hour-picker-toggle]");
-    const options = picker?.querySelector(".hour-picker-options");
-    if (!toggle || !options) return;
-
-    toggle.setAttribute("aria-expanded", String(isOpen));
-    options.hidden = !isOpen;
-    picker.classList.toggle("open", isOpen);
-  }
-
-  function closeHourPickers(exceptPicker = null) {
-    document.querySelectorAll("[data-hour-picker]").forEach(picker => {
-      if (picker !== exceptPicker) setHourPickerOpen(picker, false);
+    
+  
+   document.addEventListener("DOMContentLoaded", () => {
+    const timeStyleInput = document.getElementById("timeStyleInput");
+    const timeStyleButtons = document.querySelectorAll("[data-time-style-value]");
+  
+    const setTimeStyleValue = (style) => {
+      const normalizedStyle = normalizeTimeStyle(style);
+      if (timeStyleInput) timeStyleInput.value = normalizedStyle;
+  
+      timeStyleButtons.forEach(button => {
+        const isActive = button.dataset.timeStyleValue === normalizedStyle;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+  
+      return normalizedStyle;
+    };
+  
+    const renderAllTimePreviews = () => {
+      for (let i = 1; i <= 7; i++) {
+        const input = document.getElementById(`timeInput_${i}`);
+        const preview = document.getElementById(`timePreview_${i}`);
+        renderTimePreview(input, timeStyleInput?.value, preview);
+      }
+    };
+  
+    setTimeStyleValue(timeStyleInput?.value);
+    initializeHourPickers();
+    const clockImagePaths = {
+    1: "/clock_images/one.gif",
+    2: "/clock_images/two.gif",
+    3: "/clock_images/three.gif",
+    4: "/clock_images/four.gif",
+    5: "/clock_images/five.gif",
+    6: "/clock_images/six.gif",
+    7: "/clock_images/seven.gif",
+    8: "/clock_images/eight.gif",
+    9: "/clock_images/nine.gif",
+    10: "/clock_images/ten.gif",
+    11: "/clock_images/eleven.gif",
+    12: "/clock_images/twelve.gif"
+  };
+  
+  timeStyleButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      setTimeStyleValue(button.dataset.timeStyleValue);
+      renderAllTimePreviews();
     });
+  });
+  
+  function normalizeTimeStyle(value) {
+    const style = String(value || "").toLowerCase();
+    if (style === "clock" || style === "image") return "clock";
+    if (style === "hiragana") return "hiragana";
+    return "kanji";
   }
-
-  function setHourPickerValue(input, value, emitChange = false) {
-    if (!input) return;
-
-    const picker = input.closest("[data-hour-picker]");
-    const normalizedValue = value === undefined || value === null ? "" : String(value);
-    input.value = normalizedValue;
-
-    if (picker) {
-      const toggle = picker.querySelector("[data-hour-picker-toggle]");
-      const options = picker.querySelectorAll("[data-hour-value]");
-      if (toggle) toggle.textContent = hourLabel(normalizedValue);
-
-      options.forEach(option => {
-        const isSelected = option.dataset.hourValue === normalizedValue;
-        option.classList.toggle("selected", isSelected);
-        option.setAttribute("aria-selected", String(isSelected));
+  
+  function clockHour(hour) {
+    const h = hour % 12;
+    return h === 0 ? 12 : h;
+  }
+  
+    function parseTime(value) {
+      const rawValue = String(value || "").trim();
+      if (!rawValue) return null;
+      const hh = rawValue.includes(":") ? rawValue.split(":")[0] : rawValue;
+      const h = Number(hh);
+      if (!Number.isInteger(h) || h < 0 || h > 23) return null;
+      return { h };
+    }
+    
+    function hourLabel(value) {
+      const t = parseTime(value);
+      return t ? `${t.h}時` : "--時--";
+    }
+  
+    function setHourPickerOpen(picker, isOpen) {
+      const toggle = picker?.querySelector("[data-hour-picker-toggle]");
+      const options = picker?.querySelector(".hour-picker-options");
+      if (!toggle || !options) return;
+  
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      options.hidden = !isOpen;
+      picker.classList.toggle("open", isOpen);
+    }
+  
+    function closeHourPickers(exceptPicker = null) {
+      document.querySelectorAll("[data-hour-picker]").forEach(picker => {
+        if (picker !== exceptPicker) setHourPickerOpen(picker, false);
       });
     }
-
-    if (emitChange) input.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-
-  function initializeHourPickers() {
-    document.querySelectorAll("[data-hour-picker]").forEach(picker => {
-      const input = picker.querySelector("input[type='hidden']");
-      const toggle = picker.querySelector("[data-hour-picker-toggle]");
-
-      toggle?.addEventListener("click", () => {
-        const isOpen = toggle.getAttribute("aria-expanded") === "true";
-        closeHourPickers(picker);
-        setHourPickerOpen(picker, !isOpen);
-      });
-
-      picker.querySelectorAll("[data-hour-value]").forEach(option => {
-        option.addEventListener("click", () => {
-          setHourPickerValue(input, option.dataset.hourValue, true);
-          setHourPickerOpen(picker, false);
+  
+    function setHourPickerValue(input, value, emitChange = false) {
+      if (!input) return;
+  
+      const picker = input.closest("[data-hour-picker]");
+      const normalizedValue = value === undefined || value === null ? "" : String(value);
+      input.value = normalizedValue;
+  
+      if (picker) {
+        const toggle = picker.querySelector("[data-hour-picker-toggle]");
+        const options = picker.querySelectorAll("[data-hour-value]");
+        if (toggle) toggle.textContent = hourLabel(normalizedValue);
+  
+        options.forEach(option => {
+          const isSelected = option.dataset.hourValue === normalizedValue;
+          option.classList.toggle("selected", isSelected);
+          option.setAttribute("aria-selected", String(isSelected));
         });
+      }
+  
+      if (emitChange) input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  
+    function initializeHourPickers() {
+      document.querySelectorAll("[data-hour-picker]").forEach(picker => {
+        const input = picker.querySelector("input[type='hidden']");
+        const toggle = picker.querySelector("[data-hour-picker-toggle]");
+  
+        toggle?.addEventListener("click", () => {
+          const isOpen = toggle.getAttribute("aria-expanded") === "true";
+          closeHourPickers(picker);
+          setHourPickerOpen(picker, !isOpen);
+        });
+  
+        picker.querySelectorAll("[data-hour-value]").forEach(option => {
+          option.addEventListener("click", () => {
+            setHourPickerValue(input, option.dataset.hourValue, true);
+            setHourPickerOpen(picker, false);
+          });
+        });
+  
+        setHourPickerValue(input, input?.value || "");
       });
-
-      setHourPickerValue(input, input?.value || "");
-    });
-
-    document.addEventListener("click", event => {
-      if (!event.target.closest("[data-hour-picker]")) closeHourPickers();
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeHourPickers();
-    });
-  }
-
-  function formatTime({ h }, style) {
-    if (style === "kanji") return `${h}時`;
-
-    const hiraNums = ["ぜろ","いち","に","さん","よん","ご","ろく","なな","はち","きゅう"];
-    const toHira = (n) => {
-      if (n < 10) return hiraNums[n];
-      if (n === 10) return "じゅう";
-      if (n < 20) return `じゅう${hiraNums[n - 10]}`;
-      if (n === 20) return "にじゅう";
-      if (n < 24) return `にじゅう${hiraNums[n - 20]}`;
-      return String(n);
-    };
-    return `${h}じ`;
-  }
-
-function renderTimePreview(input, styleValue, preview) {
-  if (!input || !preview) return;
-
-  const t = parseTime(input.value);
-  if (!t) {
+  
+      document.addEventListener("click", event => {
+        if (!event.target.closest("[data-hour-picker]")) closeHourPickers();
+      });
+  
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeHourPickers();
+      });
+    }
+  
+    function formatTime({ h }, style) {
+      if (style === "kanji") return `${h}時`;
+  
+      const hiraNums = ["ぜろ","いち","に","さん","よん","ご","ろく","なな","はち","きゅう"];
+      const toHira = (n) => {
+        if (n < 10) return hiraNums[n];
+        if (n === 10) return "じゅう";
+        if (n < 20) return `じゅう${hiraNums[n - 10]}`;
+        if (n === 20) return "にじゅう";
+        if (n < 24) return `にじゅう${hiraNums[n - 20]}`;
+        return String(n);
+      };
+      return `${h}じ`;
+    }
+  
+  function renderTimePreview(input, styleValue, preview) {
+    if (!input || !preview) return;
+  
+    const t = parseTime(input.value);
+    if (!t) {
+      preview.textContent = "";
+      delete preview.dataset.timeStyle;
+      delete preview.dataset.timeValue;
+      delete preview.dataset.timeText;
+      return;
+    }
+  
+    const style = normalizeTimeStyle(styleValue);
+    const timeText = formatTime(t, style);
+    preview.dataset.timeStyle = style;
+    preview.dataset.timeValue = input.value;
+    preview.dataset.timeText = timeText;
+  
+    if (style !== "clock") {
+      preview.textContent = timeText;
+      return;
+    }
+  
     preview.textContent = "";
-    delete preview.dataset.timeStyle;
-    delete preview.dataset.timeValue;
-    delete preview.dataset.timeText;
-    return;
+    const img = document.createElement("img");
+    img.src = clockImagePaths[clockHour(t.h)];
+    img.className = "clock-image";
+    img.alt = timeText;
+    preview.appendChild(img);
   }
-
-  const style = normalizeTimeStyle(styleValue);
-  const timeText = formatTime(t, style);
-  preview.dataset.timeStyle = style;
-  preview.dataset.timeValue = input.value;
-  preview.dataset.timeText = timeText;
-
-  if (style !== "clock") {
-    preview.textContent = timeText;
-    return;
+  
+  for (let i = 1; i <= 7; i++) {
+  const input = document.getElementById(`timeInput_${i}`);
+    const preview = document.getElementById(`timePreview_${i}`);
+    const render = () => renderTimePreview(input, timeStyleInput?.value, preview);
+    input?.addEventListener("change", render);
+    render();
   }
-
-  preview.textContent = "";
-  const img = document.createElement("img");
-  img.src = clockImagePaths[clockHour(t.h)];
-  img.className = "clock-image";
-  img.alt = timeText;
-  preview.appendChild(img);
-}
-
-for (let i = 1; i <= 7; i++) {
-const input = document.getElementById(`timeInput_${i}`);
-  const preview = document.getElementById(`timePreview_${i}`);
-  const render = () => renderTimePreview(input, timeStyleInput?.value, preview);
-  input?.addEventListener("change", render);
-  render();
-}
-});
-</script>
+  });
+  </script>
 </body>

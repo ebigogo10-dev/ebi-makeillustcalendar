@@ -72,7 +72,7 @@ helpers do
 end
 
 get '/' do
-    erb :home
+    erb :signin
 end
 
 get '/signup' do
