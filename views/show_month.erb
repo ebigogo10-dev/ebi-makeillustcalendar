@@ -24,7 +24,7 @@
     <button href="/show_month/<%= @user.id %>">monthカレンダーを見る</button>
   </div>
   
-  <div class="main">
+  <div class="show">
     
     <div class="month">
     <div class="calendar-list">
@@ -36,8 +36,8 @@
       <% calendar_name = "無題のカレンダー" if calendar_name.empty? %>
       <% escaped_calendar_name = Rack::Utils.escape_html(calendar_name) %>
      
-    
-     <div class="calendar-card">
+      <div class="card-size">
+        <div class="calendar-card">
        
           <div class="calendar-name-editor" data-update-url="/calendar_name/<%= @user.id %>/<%= calendar.id %>" data-current-name="<%= escaped_calendar_name %>">
             <h3 class="calendar-name-text"><%= escaped_calendar_name %></h3>
@@ -231,10 +231,12 @@
     </div>
     
       </div>
-          
-      <button class="print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
-      <button class="pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
-      <a href="/reedit_month/<%=@user.id%>/<%= calendar.id %>" class="btn btn-success btn-edit">編集</a>
+      <div class="show-btns">
+        <button class="print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
+        <button class="pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
+        <a href="/reedit_month/<%=@user.id%>/<%= calendar.id %>">編集</a>
+      </div>
+    </div>
     </div>
     
     <% end %>
@@ -376,12 +378,14 @@
   flex: 1;
   display: flex;
   flex-direction: row;
-  gap: 1mm;
+  gap: 4px;
+  min-height: 0;
 }
 
 /* ドロップゾーン */
 .pdf-month-calendar .drop-zone {
   flex: 1 1 0;
+  min-height: 0;
   border: 1px dashed #ddd;
   display: flex;
   flex-wrap: wrap;
@@ -389,13 +393,14 @@
   justify-content: center;
   gap: 4px;
   position: relative;
+  overflow: hidden;
 }
 
 .pdf-month-calendar .day-image {
   max-width: 90%;
+  width: auto;
   max-height: 90%;
-  height: repeat(var(--weeks), 1fr);
-  min-height: 0;
+  object-fit: contain;
 }
       </style>
 
@@ -502,6 +507,14 @@ document.querySelectorAll(".print-btn").forEach(btn => {
           display: flex;
           flex-direction: column;
         }
+        
+         .month-header {
+            box-sizing: border-box;
+            border: 1px solid black;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 35px;
+          }
         
         /* 曜日ヘッダー */
         .weekday-header {

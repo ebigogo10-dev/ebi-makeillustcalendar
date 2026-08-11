@@ -531,7 +531,7 @@ body.edit-page {
 /*  margin-bottom: 8px;*/
 /*  font-weight: bold;*/
 /*  color: #5a5a5a;*/
-  cursor: default; /* ポインターを通常に */
+  /*cursor: default;*/
 /*}*/
 
 /* 入力欄とセレクトボックス */
@@ -587,8 +587,8 @@ body.edit-page {
 /*  width: 600px;*/
 /*  padding: 15px 40px;*/
 /*  text-align: center;*/
-  text-decoration: none; /* 下線を消す */
-  transition: all 0.3s; /* ←この行を追加(スムーズな動きのため) */
+  /*text-decoration: none; */
+  /*transition: all 0.3s; */
 /*}*/
 
 /*a.btn:hover {*/

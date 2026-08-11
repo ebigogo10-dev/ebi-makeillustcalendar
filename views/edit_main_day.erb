@@ -95,10 +95,10 @@
       const timeStyleInput = document.getElementById("timeStyleInput");
       const timeInput = document.getElementById(`timeInput_${timeKey}`);
       const zones = column.querySelectorAll('.drop-zone');
-      onst images = Array.from(zones).map(zone => {
+      const images = Array.from(zones).map(zone => {
       const img = zone.querySelector("img.day-image");
       if (!img) return null;
-        onst url = new URL(img.src, window.location.origin);
+        const url = new URL(img.src, window.location.origin);
       return url.origin === window.location.origin ? url.pathname : url.href;
       });
   

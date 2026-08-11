@@ -23,7 +23,7 @@
     <a href="/show_month/<%= @user.id %>">monthカレンダーを見る</a>
   </div>
   
-  <div class="main">
+  <div class="show">
     
     <div class="week">
     <div class="calendar-list">
@@ -32,7 +32,7 @@
       <% calendar_name = calendar.calendar_name.to_s.strip %>
       <% calendar_name = "無題のカレンダー" if calendar_name.empty? %>
       <% escaped_calendar_name = Rack::Utils.escape_html(calendar_name) %>
-      
+      <div class="card-size">
       <div class="calendar-card">
           <div class="calendar-name-editor" data-update-url="/calendar_name/<%= @user.id %>/<%= calendar.id %>" data-current-name="<%= escaped_calendar_name %>">
             <h3 class="calendar-name-text"><%= escaped_calendar_name %></h3>
@@ -351,11 +351,13 @@
         </div>
         
         </div>
-      <button class="print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
-      <button class="pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
-      <a href="/reedit_week/<%=@user.id%>/<%= calendar.id %>" class="btn btn-success btn-edit">編集</a>
+        <div class="show-btns">
+          <button class="print-btn" data-calendar-id="<%= calendar.id %>">印刷</button>
+          <button class="pdf-btn" data-calendar-name="<%= escaped_calendar_name %>">PDF保存</button>
+          <a href="/reedit_week/<%=@user.id%>/<%= calendar.id %>">編集</a>
+        </div>
       </div>
-      
+      </div>
       <% end %>
     </div>
     </div>

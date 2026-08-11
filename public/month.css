@@ -62,6 +62,7 @@
   flex-direction: column;
   height: auto;
   min-height: 0;  
+  width: auto;
 }
 
 .day-cell:first-child {
@@ -100,6 +101,7 @@
 .drop-zone {
   flex: 1 1 0;
   min-height: 0;
+  min-width: 0;
   border: 1px dashed #ddd;
   display: flex;
   flex-wrap: wrap;
