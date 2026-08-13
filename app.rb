@@ -288,14 +288,6 @@ get '/show_month/:user_id' do
     erb :show_month
 end
 
-# get '/howto' do
-#     erb :howto
-# end
-
-# get '/team' do
-#     erb :team
-# end
-
 get '/setting/:user_id' do
     @user = User.find(params[:user_id])
     erb :setting
